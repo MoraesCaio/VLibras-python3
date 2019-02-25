@@ -261,6 +261,7 @@ def update_database_translation(text, gloss):
 
 @app.route("/translate", methods=['GET'])
 def translate():
+	print(request.args.get('text'))
 	text = request.args.get('text').encode("UTF-8")
 	gloss = traduzir(text)
 	_thread.start_new_thread(update_database_translation, (text, gloss))

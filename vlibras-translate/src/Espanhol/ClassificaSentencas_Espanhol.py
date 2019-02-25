@@ -14,11 +14,12 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 		from nltk.tokenize import word_tokenize as tok
 
 		try:
-			decodificada = texto.translate(None, "“”«»–’‘º").decode("utf-8")
+			table = str.maketrans(dict.fromkeys("“”«»–’‘º"))
+			decodificada = s.translate(table)
 		except UnicodeDecodeError:
-			decodificada = texto.replace("“","").replace("”","").replace("«","").replace("»","").replace("’","").replace("‘","").replace("º","").decode("utf-8")
+			decodificada = texto.replace("“","").replace("”","").replace("«","").replace("»","").replace("’","").replace("‘","").replace("º","")
 		except:
-			decodificada = texto.decode("utf-8")
+			decodificada = texto
 
 		return tok(decodificada)
 

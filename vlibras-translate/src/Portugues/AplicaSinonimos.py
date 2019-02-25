@@ -70,7 +70,7 @@ class AplicaSinonimos(object):
 
 	def carregar_palavras_compostas(self):
 		path = self.localizar_arquivo_palavras_compostas()
-		return set(open(path).read().decode('utf-8').split())
+		return set(open(path).read().split())
 
 	def localizar_arquivo_palavras_compostas(self):
 		if "TRANSLATE_DATA" in environ:

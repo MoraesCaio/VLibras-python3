@@ -148,18 +148,18 @@ n'água
 
 import string, re, nltk
 
-PALAVRAS_COM_CLITICO="quebra-cabeça esquecemo-nos vimo-la vendê-lo parti-la partí-lo levaram levaram-no levá-las levar-lhes queixar-se esqueci-me lembrei-te elogiou-o elogiaram-nas levou-as levá-lo comprá-lo queixou-se".decode("utf-8").split()
+PALAVRAS_COM_CLITICO="quebra-cabeça esquecemo-nos vimo-la vendê-lo parti-la partí-lo levaram levaram-no levá-las levar-lhes queixar-se esqueci-me lembrei-te elogiou-o elogiaram-nas levou-as levá-lo comprá-lo queixou-se".split()
 
 # Para facilitar a testagem do módulo, definimos a variável global SENT:
 SENT="""O Prof. Leonel (UFC) chamou a atenção para o fato de que a toquenização é um processo não trivial,
 devido, sobretudo, às abreviaturas."""
 # Decodificação da cadeia unicode utilizando a codificação utf-8:
-SENT=SENT.decode("utf-8")
+SENT=SENT
 
 # Outros exemplos para testar toquenização:
 TEXTO="""O Dr. José P. Fernandes disse-lhe que a pistola .45 custa R$ 3,5 mil, 35.08% de Cz$ 3.800,98, às 18h30min da segunda-feira (22/10/2010). 
 No passado. 
-Dir-se-ia que ele deu com os burros n'água...""".decode("utf-8")
+Dir-se-ia que ele deu com os burros n'água..."""
 SENTENCAS=TEXTO.split("\n")
 
 SINAIS=string.punctuation
@@ -174,12 +174,13 @@ ABREVIATURAS="Prof Profa Sr Sra Dr Dra".split()
 # esta expressão deve ser usada para toquenizar textos
 # a serem anotados por etiquetadores como o LX-Tagger;
 # o ponto final delimitador de sentença, contudo, não é separado:
-EX='''(?x)[A-Za-z]+[.$]| # palavras terminando em ponto ou cifrão
+EX='[A-Za-z]+[.$]|[)(!?"]|\.\d+|\d+[.,]\d+[.,]\d+|\d+[.,]\d+|\w+(?:[-\']\w+|\w+)*|\.{2,}|[^\w\s]+'
+'''(?x)[A-Za-z]+[.$]| # palavras terminando em ponto ou cifrão
 [)(!?"]| # sinais de pontuação
 \.\d+| # expressões numéricas como .45
 \d+[.,]\d+[.,]\d+| # números como 3.800,98
 \d+[.,]\d+| # números como 3,5 e 3.5
-\w+([-\']\w+|\w+)* | # palavras com ou sem hífen ou apóstrofo
+\w+(?:[-\']\w+|\w+)* | # palavras com ou sem hífen ou apóstrofo
 \.{2,} | # dois ou mais pontos (reticências)
 [^\w\s]+ # não palavras e não espaços'''
 

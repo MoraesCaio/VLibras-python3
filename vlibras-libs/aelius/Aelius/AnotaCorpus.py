@@ -45,7 +45,7 @@ from .openNLPJava import openNLPTagger
 
 COMMENT=" TEI P5 header based on template created with EditiX http://www.editix.com/"
 # TEI=carrega("template.xml")
-EXEMPLO="Os candidatos classificáveis dos cursos de Sistemas de Informação poderão ocupar as vagas remanescentes do Curso de Engenharia de Software.".decode("utf-8")
+EXEMPLO="Os candidatos classificáveis dos cursos de Sistemas de Informação poderão ocupar as vagas remanescentes do Curso de Engenharia de Software."
 # Extraído da seguinte fonte:
 
 # UFC convoca os classificáveis do Vestibular 2010. Disponível em: 
@@ -103,7 +103,7 @@ def codifica_sentencas(sentencas):
     for sent in sentencas:
         cols=[]
         for w in sent:
-                cols.append(w.encode("utf-8"))
+            cols.append(w.encode("utf-8"))
         lista_sentencas.append(cols)
     return lista_sentencas
 

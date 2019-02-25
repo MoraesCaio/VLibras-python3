@@ -33,6 +33,7 @@ from os import environ, path
 from Aelius.Extras import carrega
 from Aelius import AnotaCorpus, Toqueniza
 from unicodedata import normalize
+from unidecode import unidecode
 from TemplateClassificaSentencas import TemplateClassificaSentencas
 
 class ClassificaSentencas(TemplateClassificaSentencas):
@@ -45,11 +46,12 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 		"""Decodifica string utilizando utf-8, retornando uma lista de tokens em unicode.
 		"""
 		try:
-			decodificada = s.translate(None, "“”«»–’‘º").decode("utf-8")
+			table = str.maketrans(dict.fromkeys("“”«»–’‘º"))
+			decodificada = s.translate(table)
 		except UnicodeDecodeError:
-			decodificada = s.replace("“","").replace("”","").replace("«","").replace("»","").replace("’","").replace("‘","").replace("º","").decode("utf-8")
-		except:
-			decodificada = s.decode("utf-8")
+			decodificada = s.replace("“","").replace("”","").replace("«","").replace("»","").replace("’","").replace("‘","").replace("º","")
+		except Exception as e:
+			decodificada = s
 		return Toqueniza.TOK_PORT_LX.tokenize(decodificada)
 
 	def obter_classificacao_morfologica(self):
@@ -58,13 +60,12 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 	def etiqueta_sentenca(self, s):
 		"""Aplica um dos etiquetadores do Aelius na etiquetagem da sentença dada como lista de tokens.
 		"""
-
 		etiquetador = carrega("AeliusHunPos")
 
 		anotada = AnotaCorpus.anota_sentencas([s],etiquetador,"hunpos")[0]
 		
 		while (anotada[0][1] is None):
-			time.sleep(random.choice(sleep_times))
+			time.sleep(random.choice(self.sleep_times))
 			anotada = AnotaCorpus.anota_sentencas([s],etiquetador,"hunpos")[0]
 		regex = re.compile('[%s]' % re.escape('\u2022''!"#&\'()*+,./:;<=>?@[\\]^_`{|}~'))
 		tag_punctuation = [".",",","QT","("]
@@ -96,13 +97,16 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 	def gera_entradas_lexicais(self, lista):
 		"""Gera entradas lexicais no formato CFG do NLTK a partir de lista de pares constituídos de tokens e suas etiquetas.
 		"""
+		print('1',lista)
 		entradas=[]
 		for e in lista:
 			# é necessário substituir símbolos como "-" e "+" do CHPTB
 			# que não são aceitos pelo NLTK como símbolos não terminais
-			c=re.sub(r"[-+]","_",e[1])
+			c=re.sub(r"[-+]","_",e[1].decode())
 			c=re.sub(r"\$","_S",c)
 			entradas.append("%s -> '%s'" % (c, self.remove_acento(e[0])))
+			print("%s -> '%s'" % (c, self.remove_acento(e[0])))
+		print('2',entradas)
 		return entradas
 
 	def corrige_anotacao(self, lista):
@@ -157,9 +161,9 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 
 	def remove_acento(self, texto):
 		try:
-			return normalize('NFKD', texto.encode('utf-8').decode('utf-8')).encode('ASCII', 'ignore')
+			return unidecode.unidecode(texto)
 		except:
-			return normalize('NFKD', texto.encode('iso-8859-1').decode('iso-8859-1')).encode('ASCII','ignore')
+			return normalize('NFKD', texto.encode('iso-8859-1').decode('iso-8859-1')).encode('ASCII','ignore').decode()
 
 	def exibe_arvores(self, arvores):
 		"""Função 'wrapper' para a função de exibição de árvores do NLTK"""
@@ -168,4 +172,5 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 	def iniciar_classificacao(self, sentenca):
 		tokens = self.toqueniza(sentenca)
 		tree = self.analisa_sentenca(tokens)
+		print('TREE >>',tree)
 		return tree

@@ -115,7 +115,7 @@ class openNLPTagger(nltk.TaggerI):
             if isinstance(token, str):
                 token = token.encode(self._encoding)
             self._openNLP.stdin.write("%s " % token)
-    	self._openNLP.stdin.write("\n")
+            self._openNLP.stdin.write("\n")
         self._openNLP.stdin.flush()
         
         tagged_sentence = self._openNLP.stdout.readline().strip()

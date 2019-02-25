@@ -214,7 +214,7 @@ class LerDicionarios(object, metaclass=Singleton):
   
       rows = []
       for row in self.file:
-         rows.append(row[0].decode("utf-8"))
+         rows.append(row[0])
       self.set_pron_trat = set(rows) 
 
    def carregar_verbos_muda_negacao(self):

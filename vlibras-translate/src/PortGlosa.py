@@ -55,7 +55,10 @@ def iniciar_sem_threads(texto, taxa_qualidade,lang):
 		thread_tradutor = ThreadTradutor(texto,taxa_qualidade,lang)
 		thread_tradutor.start()
 		thread_tradutor.join()
-		saidas.append(thread_tradutor.obter_glosa())
+		glosa = thread_tradutor.obter_glosa()
+		if type(glosa) == bytes:
+			glosa = glosa.decode()
+		saidas.append(glosa)
 	if taxa_qualidade:
 		return gerar_taxa_qualidade(saidas)
 	return " ".join(saidas)

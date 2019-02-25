@@ -46,7 +46,7 @@ Fortaleza era uma cidade provinciana .
 Bom .
 ... – Bom .
 ?
-! ? ? –""".decode("utf-8")
+! ? ? –"""
 
 SENTENCAS = TEXTO.splitlines()
 SENTENCAS.append("")
@@ -63,7 +63,7 @@ SENTENCAS.append("")
 # pressupõe-se que no texto ocorre apenas
 # Unicode 2013 EN DASH e reticências como sinais
 # de pontuação além dos definidos em string.punctuation:
-PONTUACAO = "–".decode("utf-8")+ "..." + string.punctuation
+PONTUACAO = "–"+ "..." + string.punctuation
 
 
 
