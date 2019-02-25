@@ -22,9 +22,9 @@ class AplicaSinonimos(object):
 
 	def __init__(self):
 		self.dicionarios = LerDicionarios()
-		self.ordinais = {'8\xaa': 'oitava', '3\xba': 'terceiro', '9\xaa': 'nona', '5\xba': 'quinto', '6\xaa': 'sexta',
-							'1\xba': 'primeiro', '7\xaa': 's\xe9tima', '2\xba': 'segundo', '8\xba': 'oitavo', '3\xaa': 'terceira',
-								'9\xba': 'nono', '5\xaa': 'quinta', '6\xba': 'sexto', '1\xaa': 'primeira', '7\xba': 's\xe9timo', '2\xaa': 'segunda'}
+		self.ordinais = {u'8\xaa': u'oitava', u'3\xba': u'terceiro', u'9\xaa': u'nona', u'5\xba': u'quinto', u'6\xaa': u'sexta',
+							u'1\xba': u'primeiro', u'7\xaa': u's\xe9tima', u'2\xba': u'segundo', u'8\xba': u'oitavo', u'3\xaa': u'terceira',
+								u'9\xba': u'nono', u'5\xaa': u'quinta', u'6\xba': u'sexto', u'1\xaa': u'primeira', u'7\xba': u's\xe9timo', u'2\xaa': u'segunda'}
 
 	# Itera sobre os tokens obtendo os sinonimos
 	def aplicar_sinonimos(self, lista_anotada):
@@ -70,7 +70,7 @@ class AplicaSinonimos(object):
 
 	def carregar_palavras_compostas(self):
 		path = self.localizar_arquivo_palavras_compostas()
-		return set(open(path).read().split())
+		return set(open(path).read().decode('utf-8').split())
 
 	def localizar_arquivo_palavras_compostas(self):
 		if "TRANSLATE_DATA" in environ:
@@ -81,7 +81,7 @@ class AplicaSinonimos(object):
 			return self.ordinais[token]
 
 	def verificar_ordinal(self, token):
-		return token in self.ordinais
+		return self.ordinais.has_key(token)
 
 	def converter_ordinal_para_cardinal(self, token):
 		return token.replace("ª".decode('utf-8'), "").replace("º".decode('utf-8'), "")

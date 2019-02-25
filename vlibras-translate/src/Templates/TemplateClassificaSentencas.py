@@ -48,7 +48,7 @@ class TemplateClassificaSentencas():
 			print("Instacie o dicionario")
 			raise AttributeError
 
-		regex = re.compile('[%s]' % re.escape('\u2022''!"#&\'()*+,./:;<=>?@[\\]^_`{|}~'))
+		regex = re.compile('[%s]' % re.escape(u'\u2022''!"#&\'()*+,./:;<=>?@[\\]^_`{|}~'))
 		tag_punctuation = [".",",","QT","("]
 		anotada_corrigida = []
 
@@ -71,14 +71,14 @@ class TemplateClassificaSentencas():
 						tag_result = tag_result.encode("utf-8")
 						if tag_result != "-":
 							tag = tag_result
-				except AttributeError as e:
+				except AttributeError, e:
 					pass
 				#################
 
 				tupla = [regex.sub('',x[0]).lower(),tag]
 				if tupla[0] != "": anotada_corrigida.append(tupla)
 			else:
-				if x[0] in self.pontuacao:
+				if self.pontuacao.has_key(x[0]):
 					anotada_corrigida.append([self.pontuacao[x[0]].decode("utf-8"),"SPT"])
 				# if x[0] == ".":
 				# 	anotada_corrigida.append(["[ponto]".decode("utf-8"),"SPT"])
@@ -126,7 +126,7 @@ class TemplateClassificaSentencas():
 			f.close()
 			return sintaxe
 		else:
-			print("Arquivo %s não encontrado em nenhum dos diretórios de dados do NLTK:\n%s" % (caminho,"\n".join(nltk.data.path)))
+			print "Arquivo %s não encontrado em nenhum dos diretórios de dados do NLTK:\n%s" % (caminho,"\n".join(nltk.data.path))
 
 	def analisa_sentenca(self, sentenca):
 		"""Retorna lista de árvores de estrutura sintagmática para a sentença dada sob a forma de uma lista de tokens, com base na gramática CFG cujo caminho é especificado como segundo argumento da função. Esse caminho é relativo à pasta nltk_data da instalação local do NLTK. A partir da etiquetagem morfossintática da sentença são geradas entradas lexicais que passam a integrar a gramática CFG. O caminho da gramática e o parser gerado são armazenados como tupla na variável ANALISADORES.

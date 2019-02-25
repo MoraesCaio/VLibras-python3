@@ -34,7 +34,7 @@ def carrega(caminho):
     if os.path.exists(p):
         return p
     else:
-        print("Arquivo ou diretório inexistente: %s" % p)
+        print "Arquivo ou diretório inexistente: %s" % p
 
 def escreve_corpus(sentencas_anotadas,nome_do_arquivo,sep1="\t",sep2="\n",sep3="\n"):
 	"""Escreve em arquivo sentenças no formato unicode, anotadas, dadas como listas de pares (w,t), onde w é uma palavra e t, uma etiqueta.

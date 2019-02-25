@@ -10,11 +10,11 @@
 #
 # $Id: ConstroiRUBT.py $
 
-import pickle, time
+import cPickle, time
 from nltk.tag import UnigramTagger,BigramTagger,TrigramTagger
 from nltk.corpus import TaggedCorpusReader
-from .AnotaCorpus import abre_etiquetador,codifica_sentencas
-from .Toqueniza import TOK_PORT
+from AnotaCorpus import abre_etiquetador,codifica_sentencas
+from Toqueniza import TOK_PORT
 
 # Exemplo extraído de "Recordações do Escrivão Isaias Caminha",
 # de Lima Barreto
@@ -46,7 +46,7 @@ def treina(expressao_regular,
     corpus=TaggedCorpusReader(raiz,
                          expressao_regular,
                          encoding=codificacao)
-    print("Conjunto de treino:\n%s\n" % " \n".join(corpus.fileids()))
+    print "Conjunto de treino:\n%s\n" % " \n".join(corpus.fileids())
     sents=corpus.tagged_sents()
     #print sents[3]
     #print type(sents[3][0][0])
@@ -63,26 +63,26 @@ def treina(expressao_regular,
         dev=sents[:size]
         size=int(len(dev)*razao)
         train=dev[:size]
-        print("\n\nQuantidade de sentenças")
-        print("Conjunto de treinamento: %d" % len(train))
-        print("Total de %d tokens" % len(sum(train, [])))
+        print "\n\nQuantidade de sentenças"
+        print "Conjunto de treinamento: %d" % len(train)
+        print "Total de %d tokens" % len(sum(train, []))
         test=dev[size:]
-        print("Conjunto de teste: %d sentenças" % len(test))
-        print("Total de %d tokens" % len(sum(test, [])))
+        print "Conjunto de teste: %d sentenças" % len(test)
+        print "Total de %d tokens" % len(sum(test, []))
         t1=time.time()
         rubt=backoff_tagger(train,
                                  [UnigramTagger,BigramTagger,TrigramTagger],
                                  backoff=regexp_tagger)
         t2=time.time()
-        print("Tempo de treinamento em segundos: %f" % (t2-t1))
-        print('Etiquetagem da sentença-exemplo "%s"\n' % EXEMPLO,rubt.tag(SENTENCA))
+        print "Tempo de treinamento em segundos: %f" % (t2-t1)
+        print 'Etiquetagem da sentença-exemplo "%s"\n' % EXEMPLO,rubt.tag(SENTENCA)
         f=open(destino,"wb")
-        pickle.dump(rubt,f,-1)
+        cPickle.dump(rubt,f,-1)
         if razao < 1.0:
             t1=time.time()
 	    # introduzir avaliação por meio de Avalia.testa_etiquetador
-            print("\nAcurácia na etiquetagem do conjunto de teste: %f" % rubt.evaluate(test))
+            print "\nAcurácia na etiquetagem do conjunto de teste: %f" % rubt.evaluate(test)
             t2=time.time()
-            print("Tempo de avaliação em segundos: %f" % (t2-t1))
+            print "Tempo de avaliação em segundos: %f" % (t2-t1)
     
 

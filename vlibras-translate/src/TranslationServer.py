@@ -9,7 +9,7 @@ from subprocess import check_output, Popen
 from threading import Lock
 from time import sleep
 from logging.handlers import RotatingFileHandler
-import Trie, os, argparse, json, _thread, logging, sys
+import Trie, os, argparse, json, thread, logging, sys
 
 MySQLdb=None
 RUN_MODE=None
@@ -55,7 +55,7 @@ def connect_database():
 		try:
 			conn = MySQLdb.connect(user="root", db="signsdb")
 		except:
-			print("Trying to connect to the database...\n")
+			print "Trying to connect to the database...\n"
 			sleep(5)
 			continue
 		break
@@ -68,7 +68,7 @@ def full_mode():
 def logger():
 	global app
 	logfile = os.path.join(os.environ['HOME'], "translate.log")
-	print(' * Running...\n # See the log in: ' + logfile)
+	print ' * Running...\n # See the log in: ' + logfile
 	handler = RotatingFileHandler(logfile, maxBytes=10000, backupCount=10)
 	handler.setLevel(logging.DEBUG)
 	app.logger.addHandler(handler)
@@ -86,18 +86,18 @@ def init_mode(args):
 	RUN_MODE = args.mode.lower()
 	if RUN_MODE == "dict":
 		dict_mode()
-		print("# Server started in dictionary mode. Requests will be accepted for translation of texts and download bundles.\n# Endpoints '/translate' and '/<PLATFORM>/<SIGN>' are available.")
+		print "# Server started in dictionary mode. Requests will be accepted for translation of texts and download bundles.\n# Endpoints '/translate' and '/<PLATFORM>/<SIGN>' are available."
 	elif RUN_MODE == "full":
 		full_mode()
-		print("# Server started in full mode. Requests will be accepted for translation of texts, download bundles. All bundles requests will be stored in a database.\n# Endpoints '/translate', '/<PLATFORM>/<SIGN>' and '/statistics' are available.")
+		print "# Server started in full mode. Requests will be accepted for translation of texts, download bundles. All bundles requests will be stored in a database.\n# Endpoints '/translate', '/<PLATFORM>/<SIGN>' and '/statistics' are available."
 	elif RUN_MODE == "translate":
-		print("# Server started in translation mode.\n# Only endpoint '/translate' available.")
+		print "# Server started in translation mode.\n# Only endpoint '/translate' available."
 	
 def list_bundles():
 	global BUNDLES_LIST
 	states = ["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]
 	BUNDLES_LIST["DEFAULT"] = check_platform_files()
-	for platform, path in BUNDLES_PATH.items():
+	for platform, path in BUNDLES_PATH.iteritems():
 		BUNDLES_LIST[platform] = {}
 		for state in states:
 			try:
@@ -162,7 +162,7 @@ def insert_sign_db(sign_name, value, has):
 		conn.commit()
 	except MySQLdb.OperationalError:
 		connect_database()
-		print("Reconnecting...")
+		print "Reconnecting..."
 		insert_sign_db(sign_name, value, has)
 
 def update_sign_db(sign_name, amount, has):
@@ -173,7 +173,7 @@ def update_sign_db(sign_name, amount, has):
 		conn.commit()
 	except MySQLdb.OperationalError:
 		connect_database()
-		print("Reconnecting...")
+		print "Reconnecting..."
 		update_sign_db(sign_name, amount, has)
 
 def select_sign_db(sign_name):
@@ -188,7 +188,7 @@ def select_sign_db(sign_name):
 		return amount
 	except MySQLdb.OperationalError:
 		connect_database()
-		print("Reconnecting...")
+		print "Reconnecting..."
 		return select_sign_db(sign_name)
 
 def insert_translation_db(text, gloss):
@@ -199,7 +199,7 @@ def insert_translation_db(text, gloss):
 		conn.commit()
 	except MySQLdb.OperationalError:
 		connect_database()
-		print("Reconnecting...")
+		print "Reconnecting..."
 		insert_translation_db(text, gloss)
 
 def update_translation_db(text, gloss):
@@ -210,7 +210,7 @@ def update_translation_db(text, gloss):
 		conn.commit()
 	except MySQLdb.OperationalError:
 		connect_database()
-		print("Reconnecting...")
+		print "Reconnecting..."
 		update_translation_db(text, gloss)
 
 def select_translation_db(text, gloss):
@@ -225,7 +225,7 @@ def select_translation_db(text, gloss):
 		return amount
 	except MySQLdb.OperationalError:
 		connect_database()
-		print("Reconnecting...")
+		print "Reconnecting..."
 		return select_translation_db(text, gloss)
 
 def update_platform_db(platform_name):
@@ -236,7 +236,7 @@ def update_platform_db(platform_name):
 		conn.commit()
 	except MySQLdb.OperationalError:
 		connect_database()
-		print("Reconnecting...")
+		print "Reconnecting..."
 		update_platform_db(platform_name)
 
 def update_database_statistic(sign_name, platform_name, file_exists):
@@ -261,10 +261,9 @@ def update_database_translation(text, gloss):
 
 @app.route("/translate", methods=['GET'])
 def translate():
-	print(request.args.get('text'))
 	text = request.args.get('text').encode("UTF-8")
 	gloss = traduzir(text)
-	_thread.start_new_thread(update_database_translation, (text, gloss))
+	thread.start_new_thread(update_database_translation, (text, gloss))
 	return gloss
 
 @app.route("/statistics")
@@ -295,7 +294,7 @@ def get_sign(platform, sign):
 	sign = sign.encode("UTF-8")
 	if " " in sign or platform not in BUNDLES_PATH: abort(400)
 	file_exists = sign in BUNDLES_LIST["DEFAULT"]
-	_thread.start_new_thread(update_database_statistic, (sign, platform, file_exists))
+	thread.start_new_thread(update_database_statistic, (sign, platform, file_exists))
 	if file_exists:
 		return send_from_directory(BUNDLES_PATH[platform], sign)
 	abort(404)
@@ -309,7 +308,7 @@ def get_sign_state(platform, state, sign):
 	if " " in sign or platform not in BUNDLES_PATH: abort(400)
 	file_exists = sign in BUNDLES_LIST[platform][state]
 	if file_exists:
-		_thread.start_new_thread(update_database_statistic, (sign, platform, file_exists))
+		thread.start_new_thread(update_database_statistic, (sign, platform, file_exists))
 		return send_from_directory(os.path.join(BUNDLES_PATH[platform], state), sign)
 	return get_sign(platform.decode("UTF-8"), sign.decode("UTF-8"))
 

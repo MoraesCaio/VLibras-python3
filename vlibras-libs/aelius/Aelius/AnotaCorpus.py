@@ -30,22 +30,22 @@
 """
 
 import os,sys,nltk
-from pickle import load
+from cPickle import load
 try:
-    import xml.etree.cElementTree as ET
+    	import xml.etree.cElementTree as ET
 except ImportError:
-    import xml.etree.ElementTree as ET
+    	import xml.etree.ElementTree as ET
 #from Aelius.Extras import carrega
-from .Extras import carrega
-from .ProcessaNomesProprios import *
-from .ExpandeContracoes import expande_contracoes
-from .Toqueniza import PUNKT,TOK_PORT
-from .MXPOST import MXPOSTTagger
-from .openNLPJava import openNLPTagger
+from Extras import carrega
+from ProcessaNomesProprios import *
+from ExpandeContracoes import expande_contracoes
+from Toqueniza import PUNKT,TOK_PORT
+from MXPOST import MXPOSTTagger
+from openNLPJava import openNLPTagger
 
 COMMENT=" TEI P5 header based on template created with EditiX http://www.editix.com/"
 # TEI=carrega("template.xml")
-EXEMPLO="Os candidatos classificáveis dos cursos de Sistemas de Informação poderão ocupar as vagas remanescentes do Curso de Engenharia de Software."
+EXEMPLO="Os candidatos classificáveis dos cursos de Sistemas de Informação poderão ocupar as vagas remanescentes do Curso de Engenharia de Software.".decode("utf-8")
 # Extraído da seguinte fonte:
 
 # UFC convoca os classificáveis do Vestibular 2010. Disponível em: 
@@ -101,10 +101,10 @@ def codifica_sentencas(sentencas):
     """
     lista_sentencas=[]
     for sent in sentencas:
-        cols=[]
-        for w in sent:
-            cols.append(w.encode("utf-8"))
-        lista_sentencas.append(cols)
+	cols=[]
+	for w in sent:
+		cols.append(w.encode("utf-8"))
+	lista_sentencas.append(cols)
     return lista_sentencas
 
 def decodifica_sentencas(sentencas):
@@ -112,17 +112,17 @@ def decodifica_sentencas(sentencas):
     """
     lista_sentencas=[]
     for sent in sentencas:
-        cols=[]
-        for w in sent:
-                cols.append(w.decode("utf-8"))
-        lista_sentencas.append(cols)
+	cols=[]
+	for w in sent:
+		cols.append(w.decode("utf-8"))
+	lista_sentencas.append(cols)
     return lista_sentencas
 
 def codifica_sentencas_anotadas(sentencas_anotadas):
     lista_codificada=[]
     for sent in sentencas_anotadas:
         cols=[]
-        for w,t in sent:
+	for w,t in sent:
             #print w,t # teste aqui
             cols.append((w.encode("utf-8"),t.encode("utf-8")))
         lista_codificada.append(cols)
@@ -138,8 +138,8 @@ def decodifica_sentencas_anotadas(sentencas_anotadas):
     lista_codificada=[]
     for sent in sentencas_anotadas:
         cols=[]
-        for w,t in sent:
-                cols.append((w.decode("utf-8"),t.decode("utf-8")))
+	for w,t in sent:
+		cols.append((w.decode("utf-8"),t.decode("utf-8")))
         lista_codificada.append(cols)
     return lista_codificada
 
@@ -174,7 +174,7 @@ def abre_etiquetador(modelo,arquitetura="nltk"):
     elif a =="opennlp":
         return openNLPTagger(modelo,encoding="utf-8")
     else:
-        print("Valor inválido para o parâmetro arquitetura: %s" % arquitetura)
+        print "Valor inválido para o parâmetro arquitetura: %s" % arquitetura
     
 def _anota_sentencas_nltk(sents,modelo):
     """Recebe uma lista de sentenças, onde cada sentença é uma lista de tokens em unicode,
@@ -245,7 +245,7 @@ def maiusculiza_inicio(lista_de_sentencas):
     for indice in range(len(lista_de_sentencas)):
         palavras,etiquetas= separa_palavras_de_etiquetas(lista_de_sentencas[indice])
         palavras=maiusculiza_inicio_de_sentenca(palavras)
-        lista_de_sentencas[indice]=list(zip(palavras,etiquetas))
+        lista_de_sentencas[indice]=zip(palavras,etiquetas)
 
 def formata_paragrafos(paras):
     '''Maiusculiza o início de cada sentença do parágrafo.
@@ -282,30 +282,30 @@ def escreve_formato_nltk(paras,nome,desenvolvimento=False):
     f.close()
 
 def constroi_xml(paragrafos_anotados,capitulo=1):
-        tree=ET.parse(TEI)
-        root=tree.getroot()
-        root.insert(0,ET.Comment(COMMENT))
-        body=tree.getiterator("body")[0]
-        div=ET.SubElement(body,"div",type="chap",n="%d" % capitulo)
-        t,s,p=1,1,1
-        for para in paragrafos_anotados:
-                elemento_p=ET.SubElement(div,'p',n="%d" % p)
-                p+=1
-                for sent in para:
-                        elemento_s=ET.SubElement(elemento_p,'s',n="%d" % s)
-                        s+=1
-                        for palavra,etiqueta in sent:
-                                elemento_w=ET.SubElement(elemento_s,'w',type=etiqueta)
-                                elemento_w.text=palavra
-                                elemento_w.set("xml:id","w%d" % t)
-                                t+=1
-        return tree
-                
+	tree=ET.parse(TEI)
+	root=tree.getroot()
+	root.insert(0,ET.Comment(COMMENT))
+	body=tree.getiterator("body")[0]
+	div=ET.SubElement(body,"div",type="chap",n="%d" % capitulo)
+	t,s,p=1,1,1
+	for para in paragrafos_anotados:
+		elemento_p=ET.SubElement(div,'p',n="%d" % p)
+		p+=1
+		for sent in para:
+			elemento_s=ET.SubElement(elemento_p,'s',n="%d" % s)
+			s+=1
+			for palavra,etiqueta in sent:
+				elemento_w=ET.SubElement(elemento_s,'w',type=etiqueta)
+				elemento_w.text=palavra
+				elemento_w.set("xml:id","w%d" % t)
+				t+=1
+	return tree
+		
 def escreve_formato_xml(paragrafos_anotados,nome):
-        element_tree=constroi_xml(paragrafos_anotados)
-        element_tree.write(nome,
-        "UTF-8",
-        xml_declaration='<?xml version="1.0" encoding="UTF-8"?>')
+	element_tree=constroi_xml(paragrafos_anotados)
+	element_tree.write(nome,
+	"UTF-8",
+	xml_declaration='<?xml version="1.0" encoding="UTF-8"?>')
 
 def _escreve_formato_xml(paras,nome,capitulo="1"):
     """Versão antiga da função escreve_formato_xml()
@@ -401,7 +401,7 @@ exemplo.maxent.txt
     paragrafos=corpus.paras()
     anotados=anota_paragrafos(paragrafos,modelo,arquitetura,separacao_contracoes)
     if formato != "xml":
-            anotados=codifica_paragrafos_anotados(anotados)
+    	anotados=codifica_paragrafos_anotados(anotados)
     # aqui: codificação dos parágrafos, para que possam ser gravados em arquivo
     #return anotados 
     if INFIXO:
@@ -425,7 +425,7 @@ exemplo.maxent.txt
         nome_output.append("%s.%s.txt" % (base_nome_input,infixo))
         escreve_formato_nltk(anotados,nome_output[0])
     #print "Arquivo anotado:\n%s" % os.path.join(os.getcwd(),nome_output)
-    print("Arquivo anotado:\n%s" % nome_output[0])
+    print "Arquivo anotado:\n%s" % nome_output[0]
 
 if __name__ == "__main__":
     import doctest

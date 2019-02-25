@@ -14,8 +14,8 @@
 """
 import os
 import nltk
-from pickle import dump
-from .AnotaCorpus import anota_sentencas,codifica_sentencas_anotadas
+from cPickle import dump
+from AnotaCorpus import anota_sentencas,codifica_sentencas_anotadas
 VERBOSE=False
 LISTA_DE_ERROS=[]
 USUARIO=os.path.expanduser("~")
@@ -38,24 +38,24 @@ for True, os erros são armazenados na variável global LISTA_DE_ERROS.
                 if VERBOSE:
                     LISTA_DE_ERROS.append((out[0],out[1],g[0],g[1]))
     # os erros só poderão ser exibidos se tiverem sido armazenados nesta lista
-    print("Total de erros: %d\nTotal de palavras:%d\nAcurácia:%f" % (erros,tagged_words,100-100.0/tagged_words*erros))
+    print "Total de erros: %d\nTotal de palavras:%d\nAcurácia:%f" % (erros,tagged_words,100-100.0/tagged_words*erros)
 
 def exibe_erros(maximo=None):
     """Exibe os erros armazenados na variável global LISTA_DE_ERROS.
     """
     if LISTA_DE_ERROS:
         i=0
-        print("Anotação automática\tAnotação humana\n")
+        print "Anotação automática\tAnotação humana\n"
         if maximo:
             limite=maximo
         else:
             limite=len(LISTA_DE_ERROS)
         while i < limite:
             w1,t1,w2,t2=LISTA_DE_ERROS[i]
-            print("%s/%s\t%s/%s" % (w1,t1,w2,t2))
+            print "%s/%s\t%s/%s" % (w1,t1,w2,t2)
             i+=1
     else:
-        print("Lista de erros vazia.")
+        print "Lista de erros vazia."
 
 def grava_erros(arquivo):
     """Grava em arquivo os erros armazenados na variável global LISTA_DE_ERROS.
@@ -66,7 +66,7 @@ def grava_erros(arquivo):
             f.write("%s\t%s\t%s\t%s\n" % (w1.encode("utf-8"),t1.encode("utf-8"),w2.encode("utf-8"),t2.encode("utf-8")))
         f.close()
     else:
-        print("Lista de erros vazia.")
+        print "Lista de erros vazia."
         # luzia_gold.cap1.txt
 def testa_etiquetador(modelo,arquitetura="nltk",raiz=".",ouro="luzia_gold\.cap\d+\.txt"):
 
@@ -104,9 +104,9 @@ def tempo(modelo,arquitetura="nltk",raiz=".",ouro="luzia_gold\.cap\d+\.txt"):
 	t1=time.time()
 	avalia.testa_etiquetador(modelo,arquitetura,raiz,ouro)
 	t2=time.time()
-	print("Tempo de avaliação do etiquetador %s: %f" % (modelo,(t2-t1)))
+	print "Tempo de avaliação do etiquetador %s: %f" % (modelo,(t2-t1))
 	t1=time.time()
 	avalia.testa_etiquetador(modelo,arquitetura,raiz,ouro)
 	t2=time.time()
-	print("Tempo de avaliação do etiquetador %s: %f" % (modelo,(t2-t1)))
+	print "Tempo de avaliação do etiquetador %s: %f" % (modelo,(t2-t1))
 

@@ -27,9 +27,9 @@ unds = {"mil":"000", "milhao":"000000","milhoes":"000000", "bilhao":"000000000",
 
 def int_to_roman(input):
     if not isinstance(input, type(1)):
-        raise TypeError("expected integer, got %s" % type(input))
+        raise TypeError, "expected integer, got %s" % type(input)
     if not 0 < input < 4000:
-        raise ValueError("Argument must be between 1 and 3999")
+        raise ValueError, "Argument must be between 1 and 3999"
     ints = (1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
     nums = ('M', 'CM', 'D', 'CD','C', 'XC','L','XL','X','IX','V','IV','I')
     result = []
@@ -42,7 +42,7 @@ def int_to_roman(input):
 
 def roman_to_int(input):
     if not isinstance(input, type("")):
-        raise TypeError("expected string, got %s" % type(input))
+        raise TypeError, "expected string, got %s" % type(input)
     input = input.upper( )
     nums = {'M':1000,
             'D':500,
@@ -59,11 +59,11 @@ def roman_to_int(input):
                 sum -= value
             else: sum += value
         except KeyError:
-            raise ValueError('input is not a valid Roman numeral: %s' % input)
+            raise ValueError, 'input is not a valid Roman numeral: %s' % input
         
     if int_to_roman(sum) == input: return str(sum)
     else:
-        raise ValueError('input is not a valid Roman numeral: %s' % input)
+        raise ValueError, 'input is not a valid Roman numeral: %s' % input
 
 def oneDigit(x):
 	return ext[0][x]
@@ -85,18 +85,18 @@ def extensoUnit(n):
     endWord = ""
     numExt = ""
 
-    if(sn[size-1] in unds):
+    if(unds.has_key(sn[size-1])):
     	size -= 1
     	endWord = sn[size]
     	del sn[size]
 
-    if(firstWord in ext[0]):
+    if(ext[0].has_key(firstWord)):
     	numExt = oneDigit(firstWord)
         
-    elif (firstWord in ext[1]):
+    elif (ext[1].has_key(firstWord)):
     	numExt = twoDigit(sn)
 
-    elif (firstWord in ext[2]):
+    elif (ext[2].has_key(firstWord)):
     	if(size == 1):
     		numExt = ext[2][firstWord]+"00"
     	elif (size == 2):
@@ -128,7 +128,7 @@ o resultado.
 def convert_extenso(extenso):
 	global newToken, auxToken
 	extensoQuebrado = extenso.lower().split(" ")
-	if len(extensoQuebrado) == 1 and simplifica(extensoQuebrado[0]) in und:
+	if len(extensoQuebrado) == 1 and und.has_key(simplifica(extensoQuebrado[0])):
 		return extenso
 	nums = []
 	it = Iterator()
@@ -136,19 +136,19 @@ def convert_extenso(extenso):
 	while(it.has_next()):
 		token = simplifica(it.get_token())
 		tokenAnterior = simplifica(it.get_token(-1))
-		if (token in und):
+		if (und.has_key(token)):
 			if(it.get_count() == 0):
 				nums.append(und[token])
 			else:
 				newToken = und[token] * int(nums[-1])
 				nums[-1] = newToken
 		else:
-			if (token in num):
+			if (num.has_key(token)):
 				auxToken = num[token]
-			elif (token not in und):
+			elif (not und.has_key(token)):
 				auxToken = extensoUnit(token)
 				
-			if((tokenAnterior not in und) and it.get_count() > 0):
+			if((not und.has_key(tokenAnterior)) and it.get_count() > 0):
 				newToken = int(auxToken) + int(nums[-1])
 				nums[-1] = newToken
 			else:

@@ -15,7 +15,7 @@ class Trie:
 
 	def _parse_characters(self):
 		self.characters_keys = {}
-		for i in range(len(self.characters)):
+		for i in xrange(len(self.characters)):
 			self.characters_keys[self.characters[i]] = i
 
 	def _key_of(self, item, i):
@@ -24,9 +24,9 @@ class Trie:
 	def _add(self, item):
 		node = self.root
 		item = list(item.decode('utf-8'))
-		for i in range(len(item)):
+		for i in xrange(len(item)):
 			key = self._key_of(item, i)
-			if key not in node.children:
+			if not node.children.has_key(key):
 				node.children[key] = Node()
 			node = node.children[key]
 		node.end = True
@@ -34,7 +34,7 @@ class Trie:
 	def _to_json(self, node):
 		keys = [];
 		children = {}
-		for key, value in node.children.items():
+		for key, value in node.children.iteritems():
 			keys.append(key)
 			children[key] = self._to_json(value)
 		keys.sort()

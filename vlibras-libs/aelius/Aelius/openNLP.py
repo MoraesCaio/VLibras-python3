@@ -79,7 +79,7 @@ class openNLPTagger(nltk.TaggerI):
         """
         openNLP_paths = ['.', '/usr/bin', '/usr/local/bin', '/opt/local/bin',
                         '/Applications/bin', '~/bin', '~/Applications/bin']
-        openNLP_paths = list(map(os.path.expanduser, openNLP_paths))
+        openNLP_paths = map(os.path.expanduser, openNLP_paths)
 
         self._openNLP_bin = nltk.internals.find_binary(
                 'opennlp', path_to_bin, 
@@ -115,7 +115,7 @@ class openNLPTagger(nltk.TaggerI):
         """
         for token in tokens:
             assert "\n" not in token, "Tokens should not contain newlines"
-            if isinstance(token, str):
+            if isinstance(token, unicode):
                 token = token.encode(self._encoding)
             self._openNLP.stdin.write("%s " % token)
     	self._openNLP.stdin.write("\n")

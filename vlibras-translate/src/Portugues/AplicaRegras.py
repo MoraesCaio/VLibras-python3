@@ -104,7 +104,7 @@ class AplicaRegras(object):
 										continue
 									elif action_text == "invert":
 										self.lista_iteracao_regra.reverse()
-									elif action_text in self.__acoes:
+									elif self.__acoes.has_key(action_text):
 										result_action = self.__acoes[action_text](tupla[0]).lower()
 										self.lista_iteracao_regra.append([result_action, tupla[1]])
 								else:
@@ -120,7 +120,7 @@ class AplicaRegras(object):
 										self.lista_iteracao_regra.append(self.lista_iteracao_regra[-1])
 										self.lista_iteracao_regra[-2] = [newtoken.text.lower(), "NTK"]
 									elif newtokenpos.text == "end":
-										print("TODO")
+										print "TODO"
 
 						if self.has_rule:
 							it.skip(count-1)
@@ -132,7 +132,7 @@ class AplicaRegras(object):
 					self.lista_corrigida.append(it.get_token()) #se nao achou regra, entao adiciona a tupla original
 		if sint:
 			return self.lista_corrigida
-		return [_f for _f in self.lista_corrigida if _f]
+		return filter(None, self.lista_corrigida)
 
 
 	def aplicar_regras_sint(self, lista, arvore):
@@ -296,7 +296,7 @@ class AplicaRegras(object):
 	def converter_arv_para_lista(self, arvore):
 		'''Converte árvore sintática para uma lista de tuplas (igual a lista morfológica).
 		'''
-		folhas = [_f for _f in arvore.leaves() if _f]
+		folhas = filter(None, arvore.leaves())
 		lista_nodes = []
 		for folha in folhas:
 			pos = tgrep_positions(arvore, folha)

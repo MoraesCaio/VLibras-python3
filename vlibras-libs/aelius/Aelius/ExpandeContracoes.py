@@ -117,7 +117,7 @@ def ProcessaFormasHifenizadas(t):
 	c=len(t)
 	while(i<c):
 		if clitico(t[i][1]) and t[i-1]==("-","+"):
-			print("-%s" % t[i][0]) # remover após integração da função no módulo
+			print "-%s" % t[i][0] # remover após integração da função no módulo
 			t[i]=("-%s" % t[i][0],t[i][1])
 		if t[i]==("-","+") and not clitico(t[i+1][1]) and not clitico(t[i-1][1]):
 			#print "%s-%s" % (t[i-1][0], t[i+1][0])

@@ -98,7 +98,7 @@ class TemplateAplicaRegras():
 										end_list.append(tupla)
 										self.lista_iteracao_regra.append(None)
 										continue
-									elif action_text in self.__acoes:
+									elif self.__acoes.has_key(action_text):
 										result_action = self.__acoes[action_text](tupla[0]).lower()
 										self.lista_iteracao_regra.append([result_action, tupla[1]])
 
@@ -132,7 +132,7 @@ class TemplateAplicaRegras():
 			if self.lista_corrigida[-1][0].encode('utf-8') in self.__pontuacoes:
 				aux = self.lista_corrigida[-1]
 				self.lista_corrigida.pop(-1)
-				print(aux)
+				print aux
 
 			for end in end_list:
 				self.lista_corrigida.append(end)
@@ -143,7 +143,7 @@ class TemplateAplicaRegras():
 
 		if sint:
 			return self.lista_corrigida
-		return [_f for _f in self.lista_corrigida if _f]
+		return filter(None, self.lista_corrigida)
 
 
 	def aplicar_regras_sint(self, lista, arvore):
@@ -307,7 +307,7 @@ class TemplateAplicaRegras():
 	def converter_arv_para_lista(self, arvore):
 		'''Converte árvore sintática para uma lista de tuplas (igual a lista morfológica).
 		'''
-		folhas = [_f for _f in arvore.leaves() if _f]
+		folhas = filter(None, arvore.leaves())
 		lista_nodes = []
 		for folha in folhas:
 			pos = tgrep_positions(arvore, folha)

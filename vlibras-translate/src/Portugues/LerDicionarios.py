@@ -18,9 +18,10 @@ class Singleton(type):
          cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
       return cls._instances[cls]
 
-class LerDicionarios(object, metaclass=Singleton):
+class LerDicionarios(object):
    '''Carrega todos os arquivos (dicionários) necessários para auxiliar durante o processo de tradução.
    '''
+   __metaclass__ = Singleton
 
    def __init__(self):
       self.path = self.get_path()
@@ -68,10 +69,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("excecoesPlural.csv")))
-      except IOError as xxx_todo_changeme:
-         (errno, strerror) = xxx_todo_changeme.args
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_excecoes_plural")
+      except IOError, (errno, strerror):
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_excecoes_plural"
    
       rows = []
       for row in self.file:
@@ -83,10 +83,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("adverbiosIntensidade.csv")), delimiter=";")
-      except IOError as xxx_todo_changeme1:
-         (errno, strerror) = xxx_todo_changeme1.args
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_adverbios_intensidade")
+      except IOError, (errno, strerror):
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_adverbios_intensidade"
    
       for row in self.file:
          if row[1] != "":
@@ -97,10 +96,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("adverbiosTempo.csv")))
-      except IOError as xxx_todo_changeme2:
-         (errno, strerror) = xxx_todo_changeme2.args
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_adverbios_tempo")
+      except IOError, (errno, strerror):
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_adverbios_tempo"
          
       rows = []
       for row in self.file:
@@ -112,10 +110,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("artigos.csv")))
-      except IOError as xxx_todo_changeme3:
-         (errno, strerror) = xxx_todo_changeme3.args
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_artigos")
+      except IOError, (errno, strerror):
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_artigos"
 
       rows = []
       for row in self.file:
@@ -127,10 +124,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("preposicoes.csv")))
-      except IOError as xxx_todo_changeme4:
-         (errno, strerror) = xxx_todo_changeme4.args
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_preposicoes")
+      except IOError, (errno, strerror):
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_preposicoes"
 
       rows = []
       for row in self.file:
@@ -142,10 +138,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("sinonimos.csv")), delimiter=";")
-      except IOError as xxx_todo_changeme5:
-         (errno, strerror) = xxx_todo_changeme5.args
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_sinonimos")
+      except IOError, (errno, strerror):
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_sinonimos"
    
       for row in self.file:
          if row[1] != "":
@@ -159,10 +154,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("subs2Generos.csv")))
-      except IOError as xxx_todo_changeme6:
-         (errno, strerror) = xxx_todo_changeme6.args
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_subs_2_generos") 
+      except IOError, (errno, strerror):
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_subs_2_generos" 
 
       rows = []
       for row in self.file:
@@ -174,10 +168,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("verbosInfinitivo.csv")), delimiter=";")
-      except IOError as xxx_todo_changeme7: 
-         (errno, strerror) = xxx_todo_changeme7.args 
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_verbos_infinitivo")
+      except IOError, (errno, strerror): 
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_verbos_infinitivo"
 
       for row in self.file:
          if row[1] != "": 
@@ -192,10 +185,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("verbosLigacao.csv")))
-      except IOError as xxx_todo_changeme8:
-         (errno, strerror) = xxx_todo_changeme8.args
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_verbos_ligacao")
+      except IOError, (errno, strerror):
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_verbos_ligacao"
   
       rows = []
       for row in self.file:
@@ -207,14 +199,13 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("pronomesTratamento.csv")))
-      except IOError as xxx_todo_changeme9:
-         (errno, strerror) = xxx_todo_changeme9.args
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_pronomes_tratamento")
+      except IOError, (errno, strerror):
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_pronomes_tratamento"
   
       rows = []
       for row in self.file:
-         rows.append(row[0])
+         rows.append(row[0].decode("utf-8"))
       self.set_pron_trat = set(rows) 
 
    def carregar_verbos_muda_negacao(self):
@@ -222,10 +213,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       try:
          self.file = csv.reader(open(self.montar_diretorio("verbosMudaNegacao.csv")), delimiter=";")
-      except IOError as xxx_todo_changeme10: 
-         (errno, strerror) = xxx_todo_changeme10.args 
-         print("I/O error(%s): %s" % (errno, strerror))
-         print("carregar_verbos_muda_negacao")
+      except IOError, (errno, strerror): 
+         print "I/O error(%s): %s" % (errno, strerror)
+         print "carregar_verbos_muda_negacao"
 
       for row in self.file:
          if row[1] != "": 
@@ -243,7 +233,7 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       if not self.dic_adv_intensidade:
          self.carregar_adverbios_intensidade()
-      return token in self.dic_adv_intensidade
+      return self.dic_adv_intensidade.has_key(token)
 
    def has_adverbio_tempo(self, token):
       '''Verifica se o token recebido consta no arquivo de advérbios de tempo.
@@ -271,7 +261,7 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       if not self.dic_sin:
          self.carregar_sinonimos()
-      return token in self.dic_sin
+      return self.dic_sin.has_key(token)
 
    def has_pron_tratam(self, token):
       '''Verifica se o token recebido consta no arquivo de pronomes de tratamento.
@@ -292,7 +282,7 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       if not self.dic_vb_infinitivo:
          self.carregar_verbos_infinitivo()
-      return token in self.dic_vb_infinitivo
+      return self.dic_vb_infinitivo.has_key(token)
 
    def has_verbo_ligacao(self, token):
       '''Verifica se o token recebido consta no arquivo de verbos de ligação.
@@ -306,7 +296,7 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       if not self.dic_vb_muda_negacao:
          self.carregar_verbos_muda_negacao()
-      return token in self.dic_vb_muda_negacao
+      return self.dic_vb_muda_negacao.has_key(token)
 
    def get_adverbio_intensidade(self, token):
       '''Verifica se o token recebido consta no arquivo de advérbios de intensidade.

@@ -32,10 +32,9 @@ class LerDicionarios(TemplateLerDicionarios):
 		'''
 		try:
 			self.file = csv.reader(open(self.montar_diretorio("Ingles/artigos_Ingles.csv")))
-		except IOError as xxx_todo_changeme:
-			(errno, strerror) = xxx_todo_changeme.args
-			print("I/O error(%s): %s" % (errno, strerror))
-			print("carregar_artigos")
+		except IOError, (errno, strerror):
+			print "I/O error(%s): %s" % (errno, strerror)
+			print "carregar_artigos"
 
 		rows = []
 		for row in self.file:
@@ -53,10 +52,9 @@ class LerDicionarios(TemplateLerDicionarios):
 		'''
 		try:
 			self.file = csv.reader(open(self.montar_diretorio("Ingles/verbos_auxiliares.csv")))
-		except IOError as xxx_todo_changeme1:
-			(errno, strerror) = xxx_todo_changeme1.args
-			print("I/O error(%s): %s" % (errno, strerror))
-			print("carregar_artigos")
+		except IOError, (errno, strerror):
+			print "I/O error(%s): %s" % (errno, strerror)
+			print "carregar_artigos"
 
 		rows = []
 		for row in self.file:
@@ -68,10 +66,9 @@ class LerDicionarios(TemplateLerDicionarios):
 		'''
 		try:
 			self.file = csv.reader(open(self.montar_diretorio("Ingles/pronomes_possessivos.csv")), delimiter=",")
-		except IOError as xxx_todo_changeme2:
-			(errno, strerror) = xxx_todo_changeme2.args
-			print("I/O error(%s): %s" % (errno, strerror))
-			print("pronomes_possessivos")
+		except IOError, (errno, strerror):
+			print "I/O error(%s): %s" % (errno, strerror)
+			print "pronomes_possessivos"
 
 		for row in self.file:
 			if row[1] != "-":
@@ -85,10 +82,9 @@ class LerDicionarios(TemplateLerDicionarios):
 		'''
 		try:
 			self.file = csv.reader(open(self.montar_diretorio("Ingles/plurais_irregulares.csv")), delimiter=",")
-		except IOError as xxx_todo_changeme3:
-			(errno, strerror) = xxx_todo_changeme3.args
-			print("I/O error(%s): %s" % (errno, strerror))
-			print("pronomes_irregulares")
+		except IOError, (errno, strerror):
+			print "I/O error(%s): %s" % (errno, strerror)
+			print "pronomes_irregulares"
 
 		for row in self.file:
 			try:
@@ -116,14 +112,14 @@ class LerDicionarios(TemplateLerDicionarios):
 		'''
 		if not self.pron_poss:
 			self.carregar_pronomes_possessivos()
-		return token in self.pron_poss
+		return self.pron_poss.has_key(token)
 
 	def has_plural_irregular(self,token):
 		'''Verifica se o token recebido consta no arquivo plurais irregulares.
 		'''
 		if not self.plural_irr:
 			self.carregar_plurais_irregulares()
-		return token in self.plural_irr
+		return self.plural_irr.has_key(token)
 
 	def get_pronome_possessivo(self,token):
 		'''Pega o pronome pessoal correspondente ao pronome poessessivo passado como parâmetro.

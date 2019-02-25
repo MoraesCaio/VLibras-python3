@@ -11,12 +11,12 @@
 #
 # $Id: ConstroiBRUBT.py $
 
-from pickle import dump
+from cPickle import dump
 from nltk.tag import brill
 from nltk.corpus import TaggedCorpusReader
-from .Extras import carrega
-from .AnotaCorpus import abre_etiquetador
-from .ConstroiRUBT import EXEMPLO,SENTENCA
+from Extras import carrega
+from AnotaCorpus import abre_etiquetador
+from ConstroiRUBT import EXEMPLO,SENTENCA
 
 TEMPLATES = [
     brill.SymmetricProximateTokensTemplate(brill.ProximateTagsRule, (1,1)),
@@ -47,7 +47,7 @@ def treina(expressao_regular,
     train_sents=corpus.tagged_sents()
     trainer = brill.FastBrillTaggerTrainer(inicial,TEMPLATES)
     brubt = trainer.train(train_sents, max_rules= max_rules, min_score=min_score)
-    print('Etiquetagem da sentença-exemplo "%s"\n' % EXEMPLO,brubt.tag(SENTENCA))
+    print 'Etiquetagem da sentença-exemplo "%s"\n' % EXEMPLO,brubt.tag(SENTENCA)
     f=open(destino,"wb")
     dump(brubt,f, -1)
     f.close()

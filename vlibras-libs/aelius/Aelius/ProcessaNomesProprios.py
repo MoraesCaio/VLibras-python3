@@ -46,7 +46,7 @@ Fortaleza era uma cidade provinciana .
 Bom .
 ... – Bom .
 ?
-! ? ? –"""
+! ? ? –""".decode("utf-8")
 
 SENTENCAS = TEXTO.splitlines()
 SENTENCAS.append("")
@@ -63,7 +63,7 @@ SENTENCAS.append("")
 # pressupõe-se que no texto ocorre apenas
 # Unicode 2013 EN DASH e reticências como sinais
 # de pontuação além dos definidos em string.punctuation:
-PONTUACAO = "–"+ "..." + string.punctuation
+PONTUACAO = "–".decode("utf-8")+ "..." + string.punctuation
 
 
 
@@ -148,8 +148,8 @@ def separa_palavras_de_etiquetas(lista_de_tuplas):
 def pprint(lista_de_sentencas):
 	for sent in lista_de_sentencas:
 		for p in sent:
-			print(p, end=' ')
-		print()
+			print p,
+		print
 
 def main():
     lista_de_sentencas=[]
@@ -159,9 +159,9 @@ def main():
     #    armazena_palavras_maiusculas(sent)
     #print DICIONARIO
     lista_de_sentencas=minusculiza_nao_nomes_proprios(lista_de_sentencas)
-    print("\nResultado da minusculização das palavras em início de sentença:\n")
+    print "\nResultado da minusculização das palavras em início de sentença:\n"
     pprint(lista_de_sentencas)
-    print("\nResultado da remaiusculização das palavras em início de sentença:\n")
+    print "\nResultado da remaiusculização das palavras em início de sentença:\n"
     for i in range(len(lista_de_sentencas)):
 	    lista_de_sentencas[i]=maiusculiza_inicio_de_sentenca(lista_de_sentencas[i])
     pprint(lista_de_sentencas)

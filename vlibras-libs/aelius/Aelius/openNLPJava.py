@@ -112,10 +112,10 @@ class openNLPTagger(nltk.TaggerI):
         """
         for token in tokens:
             assert "\n" not in token, "Tokens should not contain newlines"
-            if isinstance(token, str):
+            if isinstance(token, unicode):
                 token = token.encode(self._encoding)
             self._openNLP.stdin.write("%s " % token)
-            self._openNLP.stdin.write("\n")
+    	self._openNLP.stdin.write("\n")
         self._openNLP.stdin.flush()
         
         tagged_sentence = self._openNLP.stdout.readline().strip()

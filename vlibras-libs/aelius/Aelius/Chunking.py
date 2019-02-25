@@ -149,7 +149,7 @@ def avalia(arquivo,chunker=CHUNKER):
     """Avalia um chunker com base num arquivo no formato IOB corrigido por humano.
     """
     trees=IOB2trees(arquivo)
-    print(chunker.evaluate(trees))
+    print chunker.evaluate(trees)
     
 def main():
     """Esta função pressupõe que o texto "actg.mxpost.txt', versão anotada pelo LX-Tagger, via Aelius, do texto 'actg.txt',

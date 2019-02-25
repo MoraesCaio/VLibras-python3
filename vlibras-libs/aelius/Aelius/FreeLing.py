@@ -148,7 +148,7 @@ class FreeLingTagger(nltk.TaggerI):
         """
         FreeLing_paths = ['.', '/usr/bin', '/usr/local/bin', '/opt/local/bin',
                         '/Applications/bin', '~/bin', '~/Applications/bin']
-        FreeLing_paths = list(map(os.path.expanduser, FreeLing_paths))
+        FreeLing_paths = map(os.path.expanduser, FreeLing_paths)
 
         self._FreeLing_bin = nltk.internals.find_binary(
                 'FreeLing', path_to_bin, 

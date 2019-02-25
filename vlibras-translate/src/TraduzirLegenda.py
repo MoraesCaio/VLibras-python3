@@ -2,7 +2,7 @@ import PortGlosa as pg
 
 if __name__ == '__main__':
 
-	name = input("Nome do arquvo: ")
+	name = raw_input("Nome do arquvo: ")
 
 	fl = open(name, 'r')
 
@@ -36,8 +36,8 @@ if __name__ == '__main__':
 
 	out = open(name+".srt","w+")
 
-	for i in range(len(leg)):
-		for j in range(2,len(leg[i])):
+	for i in xrange(len(leg)):
+		for j in xrange(2,len(leg[i])):
 			leg[i][j] = pg.traduzir(leg[i][j],"en")
 
 	out.write("\n")
@@ -46,7 +46,7 @@ if __name__ == '__main__':
 		out.write(str(line[0])+"\n")
 		out.write(line[1]+"\n")
 
-		for i in range(2,len(line)):
+		for i in xrange(2,len(line)):
 			out.write(line[i]+"\n")
 
 		out.write("\n")

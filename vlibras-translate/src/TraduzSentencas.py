@@ -46,7 +46,7 @@ class TraduzSentencas(object):
 		except Exception as ex:
 			analise_sintatica = None
 			has_sintatica = False
-		
+
 		analise_morfologica = self.classificador.obter_classificacao_morfologica()
 
 		#print analise_morfologica

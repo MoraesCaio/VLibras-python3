@@ -13,4 +13,4 @@
 """Este módulo serve apenas para manter a compatibilidade com versões anteriores
 do Aelius.
 """
-from .AnotaCorpus import codifica_sentencas_anotadas as CodificaSentencasAnotadas
+from AnotaCorpus import codifica_sentencas_anotadas as CodificaSentencasAnotadas

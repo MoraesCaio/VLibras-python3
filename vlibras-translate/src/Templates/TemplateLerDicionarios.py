@@ -26,10 +26,9 @@ class TemplateLerDicionarios():
 		'''
 		try:
 			self.file = csv.reader(open(self.montar_diretorio(self.tagsFileName)), delimiter=",")
-		except IOError as xxx_todo_changeme: 
-			(errno, strerror) = xxx_todo_changeme.args 
-			print("I/O error(%s): %s" % (errno, strerror))
-			print("carregar_tags")
+		except IOError, (errno, strerror): 
+			print "I/O error(%s): %s" % (errno, strerror)
+			print "carregar_tags"
 
 		for row in self.file:
 			if row[1] != "-": 
@@ -45,7 +44,7 @@ class TemplateLerDicionarios():
 
 		if not self.dic_tags:
 			self.carregar_tags()
-		return token in self.dic_tags
+		return self.dic_tags.has_key(token)
 
 	def get_tags(self, token):
 		'''Obtém a tag correspondente no Aelius, se houver
