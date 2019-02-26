@@ -22,15 +22,16 @@ class AplicaSinonimos(object):
 
 	def __init__(self):
 		self.dicionarios = LerDicionarios()
-		self.ordinais = {'8\xaa': 'oitava', '3\xba': 'terceiro', '9\xaa': 'nona', '5\xba': 'quinto', '6\xaa': 'sexta',
-							'1\xba': 'primeiro', '7\xaa': 's\xe9tima', '2\xba': 'segundo', '8\xba': 'oitavo', '3\xaa': 'terceira',
-								'9\xba': 'nono', '5\xaa': 'quinta', '6\xba': 'sexto', '1\xaa': 'primeira', '7\xba': 's\xe9timo', '2\xaa': 'segunda'}
+		self.ordinais = {'8ª': 'oitava', '3º': 'terceiro', '9ª': 'nona', '5º': 'quinto', '6ª': 'sexta',
+							'1º': 'primeiro', '7ª': 'sétima', '2º': 'segundo', '8º': 'oitavo', '3ª': 'terceira',
+								'9º': 'nono', '5ª': 'quinta', '6º': 'sexto', '1ª': 'primeira', '7º': 'sétimo', '2ª': 'segunda'}
 
 	# Itera sobre os tokens obtendo os sinonimos
 	def aplicar_sinonimos(self, lista_anotada):
 		'''Percorre a lista fazendo a substituição pelos sinonimos.
 		'''
 		lista_corrigida = []
+		print('AplicaSinonimos aplicar_sinonimos l34:\n', lista_anotada)
 		for tupla in lista_anotada:
 			sinonimo = tupla[0].upper()
 			#sinonimo = self.verificar_sinonimo(tupla[0].upper())
@@ -42,8 +43,10 @@ class AplicaSinonimos(object):
 				else:
 					cardinal = self.converter_ordinal_para_cardinal(sinonimo)
 					lista_corrigida.append(cardinal)
+					print('AplicaSinonimos aplicar_sinonimos l46:\n', cardinal)
 					continue
 			lista_corrigida.append(sinonimo)
+		print(lista_corrigida)
 		return self.verificar_palavra_composta(lista_corrigida)
 
 	# Verifica se há sinonimo do token  
@@ -84,4 +87,4 @@ class AplicaSinonimos(object):
 		return token in self.ordinais
 
 	def converter_ordinal_para_cardinal(self, token):
-		return token.replace("ª".decode('utf-8'), "").replace("º".decode('utf-8'), "")
+		return token.replace("ª", "").replace("º", "")

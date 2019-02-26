@@ -105,10 +105,9 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 		for e in lista:
 			# é necessário substituir símbolos como "-" e "+" do CHPTB
 			# que não são aceitos pelo NLTK como símbolos não terminais
-			c=re.sub(r"[-+]","_",e[1].decode())
+			c=re.sub(r"[-+]","_",e[1])
 			c=re.sub(r"\$","_S",c)
 			entradas.append("%s -> '%s'" % (c, self.remove_acento(e[0])))
-			print('ClassificaSentencas gera_entradas_lexicais l108\n:', "%s -> '%s'" % (c, self.remove_acento(e[0])))
 		print('ClassificaSentencas gera_entradas_lexicais l109\n:', entradas)
 		return entradas
 
@@ -149,8 +148,10 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 		print('ClassificaSentencas analisa_sentenca l145:\n', self.sentenca_anotada)
 		for t in self.sentenca_anotada:
 			if t[1] != "SPT":
-				codificada.append(self.remove_acento(t[0]).encode("utf-8"))
+				codificada.append(self.remove_acento(t[0]))
 		trees=parser.parse_one(codificada)
+		print('aaaaaaaaaaaaaaaa', codificada)
+		print('trees', trees)
 		return trees
 
 	def constroi_analisador(self, s):
@@ -179,5 +180,4 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 	def iniciar_classificacao(self, sentenca):
 		tokens = self.toqueniza(sentenca)
 		tree = self.analisa_sentenca(tokens)
-		print('TREE >>',tree)
 		return tree

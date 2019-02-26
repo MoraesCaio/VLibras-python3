@@ -75,7 +75,7 @@ class LerDicionarios(object, metaclass=Singleton):
    
       rows = []
       for row in self.file:
-         rows.append(row[0].decode("utf-8"))
+         rows.append(row[0])
       self.set_exc_plural = set(rows)
 
    def carregar_adverbios_intensidade(self):
@@ -90,7 +90,7 @@ class LerDicionarios(object, metaclass=Singleton):
    
       for row in self.file:
          if row[1] != "":
-            self.dic_adv_intensidade[row[0].decode("utf-8")] = row[1].decode("utf-8")
+            self.dic_adv_intensidade[row[0]] = row[1]
 
    def carregar_adverbios_tempo(self):
       '''Carrega arquivo de advérbios de tempo.
@@ -104,7 +104,7 @@ class LerDicionarios(object, metaclass=Singleton):
          
       rows = []
       for row in self.file:
-         rows.append(row[0].decode("utf-8"))
+         rows.append(row[0])
       self.set_adv_tempo = set(rows)
 
    def carregar_artigos(self):
@@ -119,7 +119,7 @@ class LerDicionarios(object, metaclass=Singleton):
 
       rows = []
       for row in self.file:
-         rows.append(row[0].decode("utf-8"))
+         rows.append(row[0])
       self.set_art = set(rows)
 
    def carregar_preposicoes(self):
@@ -134,7 +134,7 @@ class LerDicionarios(object, metaclass=Singleton):
 
       rows = []
       for row in self.file:
-         rows.append(row[0].decode("utf-8"))
+         rows.append(row[0])
       self.set_prep = set(rows)        
 
    def carregar_sinonimos(self):
@@ -150,9 +150,9 @@ class LerDicionarios(object, metaclass=Singleton):
       for row in self.file:
          if row[1] != "":
             try:
-               self.dic_sin[row[0].decode("utf-8")] = row[1].decode("utf-8")
+               self.dic_sin[row[0]] = row[1]
             except UnicodeDecodeError:
-               self.dic_sin[row[0].decode('iso8859-1').encode('utf-8').decode('utf-8')] = row[1].decode('iso8859-1').encode('utf-8').decode('utf-8')
+               self.dic_sin[row[0]] = row[1]
 
    def carregar_subs_2_generos(self):
       '''Carrega arquivo dos substantivos comuns de 2 generos.
@@ -166,7 +166,7 @@ class LerDicionarios(object, metaclass=Singleton):
 
       rows = []
       for row in self.file:
-         rows.append(row[0].decode('iso8859-1').encode('utf-8').decode('utf-8'))
+         rows.append(row[0])
       self.set_sb_2_gen = set(rows)    
 
    def carregar_verbos_infinitivo(self):
@@ -182,9 +182,9 @@ class LerDicionarios(object, metaclass=Singleton):
       for row in self.file:
          if row[1] != "": 
             try:
-               self.dic_vb_infinitivo[row[0].decode("utf-8")] = row[1].decode("utf-8") 
+               self.dic_vb_infinitivo[row[0]] = row[1] 
             except UnicodeDecodeError:
-               self.dic_vb_infinitivo[row[0].decode('iso8859-1').encode('utf-8').decode('utf-8')] = row[1].decode('iso8859-1').encode('utf-8').decode('utf-8')
+               self.dic_vb_infinitivo[row[0]] = row[1]
 
 
    def carregar_verbos_ligacao(self):
@@ -229,7 +229,7 @@ class LerDicionarios(object, metaclass=Singleton):
 
       for row in self.file:
          if row[1] != "": 
-            self.dic_vb_muda_negacao[row[0].decode("utf-8")] = row[1].decode("utf-8")  
+            self.dic_vb_muda_negacao[row[0]] = row[1]  
 
    def has_excecao_plural(self, token):
       '''Verifica se o token recebido consta no arquivo de exceções de plural.

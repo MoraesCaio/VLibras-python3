@@ -431,8 +431,8 @@ class AplicaRegras(object):
 		'''Altera uma palavra do plural para o singular de acordo com o final da mesma.
 		'''
 		vogais = ['a','e','i','o','u']
-		if(token[-3:] == "ões".decode('utf-8') or token[-3:] == "ães".decode('utf-8') or token[-3:] == "ãos".decode('utf-8')):
-			return token[:-3]+"ão".decode('utf-8')
+		if(token[-3:] == "ões" or token[-3:] == "ães" or token[-3:] == "ãos"):
+			return token[:-3]+"ão"
 		elif(token[-3:] == "res" or token[-3:] == "zes" or token[-3:] == "nes"):
 			if token[-4] not in vogais:
 				return token[:-1]
