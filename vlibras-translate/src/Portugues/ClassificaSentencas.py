@@ -61,12 +61,14 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 		"""Aplica um dos etiquetadores do Aelius na etiquetagem da sentença dada como lista de tokens.
 		"""
 		etiquetador = carrega("AeliusHunPos")
-
+		print('ClassificaSentencas etiqueta_sentenca l62:\n', s)
 		anotada = AnotaCorpus.anota_sentencas([s],etiquetador,"hunpos")[0]
+		print('ClassificaSentencas etiqueta_sentenca l66:\n', anotada)
 		
 		while (anotada[0][1] is None):
 			time.sleep(random.choice(self.sleep_times))
 			anotada = AnotaCorpus.anota_sentencas([s],etiquetador,"hunpos")[0]
+		print('ClassificaSentencas etiqueta_sentenca l71:\n', anotada)
 		regex = re.compile('[%s]' % re.escape('\u2022''!"#&\'()*+,./:;<=>?@[\\]^_`{|}~'))
 		tag_punctuation = [".",",","QT","("]
 
@@ -86,18 +88,19 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 				if tupla[0] != "": anotada_corrigida.append(tupla)
 			else:
 				if x[0] == ".":
-					anotada_corrigida.append(["[ponto]".decode("utf-8"),"SPT"])
+					anotada_corrigida.append(["[ponto]","SPT"])
 				elif x[0] == "?":
-					anotada_corrigida.append(["[interrogação]".decode("utf-8"),"SPT"])
+					anotada_corrigida.append(["[interrogação]","SPT"])
 				elif x[0] == "!":
-					anotada_corrigida.append(["[exclamação]".decode("utf-8"),"SPT"])
+					anotada_corrigida.append(["[exclamação]","SPT"])
 
+		print('ClassificaSentencas etiqueta_sentenca l97:\n', anotada_corrigida)
 		return anotada_corrigida
 
 	def gera_entradas_lexicais(self, lista):
 		"""Gera entradas lexicais no formato CFG do NLTK a partir de lista de pares constituídos de tokens e suas etiquetas.
 		"""
-		print('1',lista)
+		print('ClassificaSentencas gera_entradas_lexicais l100\n:', lista)
 		entradas=[]
 		for e in lista:
 			# é necessário substituir símbolos como "-" e "+" do CHPTB
@@ -105,8 +108,8 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 			c=re.sub(r"[-+]","_",e[1].decode())
 			c=re.sub(r"\$","_S",c)
 			entradas.append("%s -> '%s'" % (c, self.remove_acento(e[0])))
-			print("%s -> '%s'" % (c, self.remove_acento(e[0])))
-		print('2',entradas)
+			print('ClassificaSentencas gera_entradas_lexicais l108\n:', "%s -> '%s'" % (c, self.remove_acento(e[0])))
+		print('ClassificaSentencas gera_entradas_lexicais l109\n:', entradas)
 		return entradas
 
 	def corrige_anotacao(self, lista):
@@ -140,8 +143,10 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 	def analisa_sentenca(self, sentenca):
 		"""Retorna lista de árvores de estrutura sintagmática para a sentença dada sob a forma de uma lista de tokens, com base na gramática CFG cujo caminho é especificado como segundo argumento da função. Esse caminho é relativo à pasta nltk_data da instalação local do NLTK. A partir da etiquetagem morfossintática da sentença são geradas entradas lexicais que passam a integrar a gramática CFG. O caminho da gramática e o parser gerado são armazenados como tupla na variável ANALISADORES.
 		"""
+		print('ClassificaSentencas analisa_sentenca l142:\n', sentenca)
 		parser = self.constroi_analisador(sentenca)
 		codificada=[]
+		print('ClassificaSentencas analisa_sentenca l145:\n', self.sentenca_anotada)
 		for t in self.sentenca_anotada:
 			if t[1] != "SPT":
 				codificada.append(self.remove_acento(t[0]).encode("utf-8"))
@@ -152,7 +157,9 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 		"""Constrói analisador a partir de uma única sentença não anotada, dada como lista de tokens, e uma lista de regras sintáticas no formato CFG, armazenadas em arquivo. Esta função tem um bug, causado pela maneira como o Aelius etiqueta sentenças usando o módulo ProcessaNomesProprios: quando a sentença se inicia por paravra com inicial minúscula, essa palavra não é incorporada ao léxico, mas a versão com inicial maiúscula.
 		"""
 		self.sentenca_anotada = self.etiqueta_sentenca(s)
+		print('ClassificaSentenças l155:\n', self.sentenca_anotada)
 		self.corrige_anotacao(self.sentenca_anotada)
+		print('ClassificaSentenças l155:\n', self.sentenca_anotada)
 		entradas = self.gera_entradas_lexicais(self.sentenca_anotada)
 		lexico="\n".join(entradas)
 		gramatica="%s\n%s" % (self.extrai_sintaxe().strip(),lexico)
