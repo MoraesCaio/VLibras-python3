@@ -16,6 +16,7 @@ from Iterator import *
 from ConverteExtenso import *
 from nltk_tgrep import tgrep_positions, tgrep_nodes
 from nltk import ParentedTree, Tree, draw
+from unidecode import unidecode
 
 class AplicaRegras(object):
 	'''Aplica as regras morfológicas e sintáticas após a análise morfológica/sintática.
@@ -309,7 +310,7 @@ class AplicaRegras(object):
 		'''Remove acento de um texto.
 		'''
 		try:
-			return normalize('NFKD', texto.encode('utf-8').decode('utf-8')).encode('ASCII', 'ignore')
+			return unidecode.unidecode(texto)
 		except:
 			return normalize('NFKD', texto.encode('iso-8859-1').decode('iso-8859-1')).encode('ASCII','ignore')
 
@@ -403,11 +404,11 @@ class AplicaRegras(object):
 			tag = it.get_ticket()
 
 			try:
-				num_romano = roman_to_int(it.get_word().encode('utf-8'))
+				num_romano = roman_to_int(it.get_word())
 				if it.get_prev_ticket()[-2:] == "-F":
-					lista_simplificada[it.get_count()] = [num_romano+"ª".decode('utf-8'), 'NUM-R']
+					lista_simplificada[it.get_count()] = [num_romano+"ª", 'NUM-R']
 				else:
-					lista_simplificada[it.get_count()] = [num_romano+"º".decode('utf-8'), 'NUM-R']
+					lista_simplificada[it.get_count()] = [num_romano+"º", 'NUM-R']
 			except:
 				pass
 
@@ -417,13 +418,16 @@ class AplicaRegras(object):
 			if tag != "NPR-P" and (tag[-2:] == "-P" or tag[-2:] == "_P") and self.verificar_excecao_plural(it.get_word()):
 				singular = self.analisar_plural(it.get_word())
 				lista_simplificada[it.get_count()][0] = singular
-
+		
+		print('lista_simplificada', lista_simplificada)
+		
 		if num:
 			try:
 				lista_simplificada = self.converter_extenso(lista_simplificada)
 			except:
 				pass
 
+		print('lista_simplificada', lista_simplificada)
 		return lista_simplificada
 
 
@@ -484,9 +488,12 @@ class AplicaRegras(object):
 					is_sequence = False
 					count += 1
 
+		print('>>> lista_extensos', lista_extensos, len(lista_extensos))
 		for extenso in lista_extensos:
 			ext = convert_extenso(' '.join(extenso[1]))
+			print('>>>> ext', ext)
 			lista[extenso[0]] = [str(ext), "NUM"]
+		print('>>> 2lista', lista)
 
 		deque((list.pop(lista, i) for i in sorted(indices_deletar, reverse=True)), maxlen=0)
 		return lista

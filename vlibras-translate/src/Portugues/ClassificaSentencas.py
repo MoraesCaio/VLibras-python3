@@ -150,8 +150,7 @@ class ClassificaSentencas(TemplateClassificaSentencas):
 			if t[1] != "SPT":
 				codificada.append(self.remove_acento(t[0]))
 		trees=parser.parse_one(codificada)
-		print('aaaaaaaaaaaaaaaa', codificada)
-		print('trees', trees)
+
 		return trees
 
 	def constroi_analisador(self, s):

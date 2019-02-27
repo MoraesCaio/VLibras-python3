@@ -137,7 +137,6 @@ def convert_extenso(extenso):
     while(it.has_next()):
         token = simplifica(it.get_token())
         print('token', token)
-        print('num', num)
         tokenAnterior = simplifica(it.get_token(-1))
         if (token in und):
             if(it.get_count() == 0):
@@ -168,15 +167,16 @@ def soma(lista):
 def simplifica(txt):
     newToken = ""
 
+    print('txt', txt)
     try:
-        newToken = normalize('NFKD', txt)
-        print('kkkkkkkkkkkkkkk')
+        newToken = normalize('NFKD', txt).encode('ASCII', 'ignore').decode('utf-8')
     except:
         newToken = normalize('NFKD', txt.encode('iso-8859-1').decode('iso-8859-1')).encode('ASCII','ignore')
 
     if(newToken[-3:] == "oes"):
         return newToken[:-3] + "ao"
 
+    print('newToken', newToken)
     return newToken
 
 # Test
