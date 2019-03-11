@@ -41,6 +41,7 @@ def int_to_roman(input):
     return ''.join(result)
 
 def roman_to_int(input):
+    print('>>>>>>>>>>>', input)
     if not isinstance(input, type("")):
         raise TypeError, "expected string, got %s" % type(input)
     input = input.upper( )
@@ -66,16 +67,16 @@ def roman_to_int(input):
         raise ValueError, 'input is not a valid Roman numeral: %s' % input
 
 def oneDigit(x):
-	return ext[0][x]
+    return ext[0][x]
 
 def twoDigit(x):
-	try:
-		return ext[1][x[0]]+ext[0][x[1]]
-	except:
-		return ext[1][x[0]]+"0"
+    try:
+        return ext[1][x[0]]+ext[0][x[1]]
+    except:
+        return ext[1][x[0]]+"0"
 
 def threeDigit(x):
-	return ext[2][x[0]]+ext[1][x[1]]+ext[0][x[2]]     
+    return ext[2][x[0]]+ext[1][x[1]]+ext[0][x[2]]     
 
 # Não faço mais a minima idéia de como fiz isso, só sei que funciona!
 def extensoUnit(n):
@@ -86,31 +87,31 @@ def extensoUnit(n):
     numExt = ""
 
     if(unds.has_key(sn[size-1])):
-    	size -= 1
-    	endWord = sn[size]
-    	del sn[size]
+        size -= 1
+        endWord = sn[size]
+        del sn[size]
 
     if(ext[0].has_key(firstWord)):
-    	numExt = oneDigit(firstWord)
+        numExt = oneDigit(firstWord)
         
     elif (ext[1].has_key(firstWord)):
-    	numExt = twoDigit(sn)
+        numExt = twoDigit(sn)
 
     elif (ext[2].has_key(firstWord)):
-    	if(size == 1):
-    		numExt = ext[2][firstWord]+"00"
-    	elif (size == 2):
-    		if(sn[1] == "dez"):
-    			numExt = ext[2][firstWord]+oneDigit(sn[1])
-    		try:
-    			numExt = ext[2][firstWord]+"0"+oneDigit(sn[1])
-    		except:
-    			numExt = ext[2][firstWord]+twoDigit([sn[1]])
-    	else:
-	    	numExt = threeDigit(sn)
+        if(size == 1):
+            numExt = ext[2][firstWord]+"00"
+        elif (size == 2):
+            if(sn[1] == "dez"):
+                numExt = ext[2][firstWord]+oneDigit(sn[1])
+            try:
+                numExt = ext[2][firstWord]+"0"+oneDigit(sn[1])
+            except:
+                numExt = ext[2][firstWord]+twoDigit([sn[1]])
+        else:
+            numExt = threeDigit(sn)
 
     if(endWord != ""):
-    	numExt = numExt+unds[endWord]
+        numExt = numExt+unds[endWord]
 
     return numExt 
 
@@ -126,53 +127,56 @@ o resultado.
 
 # TODO: Refatorar para nao usar mais o extensoUnit
 def convert_extenso(extenso):
-	global newToken, auxToken
-	extensoQuebrado = extenso.lower().split(" ")
-	if len(extensoQuebrado) == 1 and und.has_key(simplifica(extensoQuebrado[0])):
-		return extenso
-	nums = []
-	it = Iterator()
-	it.load(extensoQuebrado)
-	while(it.has_next()):
-		token = simplifica(it.get_token())
-		tokenAnterior = simplifica(it.get_token(-1))
-		if (und.has_key(token)):
-			if(it.get_count() == 0):
-				nums.append(und[token])
-			else:
-				newToken = und[token] * int(nums[-1])
-				nums[-1] = newToken
-		else:
-			if (num.has_key(token)):
-				auxToken = num[token]
-			elif (not und.has_key(token)):
-				auxToken = extensoUnit(token)
-				
-			if((not und.has_key(tokenAnterior)) and it.get_count() > 0):
-				newToken = int(auxToken) + int(nums[-1])
-				nums[-1] = newToken
-			else:
-				nums.append(auxToken)
-	return soma(nums)
+    global newToken, auxToken
+    extensoQuebrado = extenso.lower().split(" ")
+    if len(extensoQuebrado) == 1 and und.has_key(simplifica(extensoQuebrado[0])):
+        return extenso
+    nums = []
+    it = Iterator()
+    it.load(extensoQuebrado)
+    print('extenso', extenso)
+    while(it.has_next()):
+        token = simplifica(it.get_token())
+        print('token', token)
+        tokenAnterior = simplifica(it.get_token(-1))
+        if (und.has_key(token)):
+            if(it.get_count() == 0):
+                nums.append(und[token])
+            else:
+                newToken = und[token] * int(nums[-1])
+                nums[-1] = newToken
+        else:
+            if (num.has_key(token)):
+                auxToken = num[token]
+            elif (not und.has_key(token)):
+                auxToken = extensoUnit(token)
+                
+            if((not und.has_key(tokenAnterior)) and it.get_count() > 0):
+                newToken = int(auxToken) + int(nums[-1])
+                nums[-1] = newToken
+            else:
+                nums.append(auxToken)
+    print('nums', nums)
+    return soma(nums)
 
 def soma(lista):
-	soma = 0
-	for i in lista:
-		soma += int(i)
-	return soma
+    soma = 0
+    for i in lista:
+        soma += int(i)
+    return soma
 
 def simplifica(txt):
-	newToken = ""
+    newToken = ""
+    print('txt', txt)
+    try:
+        newToken = normalize('NFKD', txt.encode('utf-8').decode('utf-8')).encode('ASCII', 'ignore')
+    except:
+        newToken = normalize('NFKD', txt.encode('iso-8859-1').decode('iso-8859-1')).encode('ASCII','ignore')
 
-	try:
-		newToken = normalize('NFKD', txt.encode('utf-8').decode('utf-8')).encode('ASCII', 'ignore')
-	except:
-		newToken = normalize('NFKD', txt.encode('iso-8859-1').decode('iso-8859-1')).encode('ASCII','ignore')
-
-	if(newToken[-3:] == "oes"):
-		return newToken[:-3] + "ao"
-
-	return newToken
+    if(newToken[-3:] == "oes"):
+        return newToken[:-3] + "ao"
+    print('newToken', newToken)
+    return newToken
 
 # Test
 '''
@@ -184,12 +188,12 @@ if __name__ == '__main__':
     arquivoNums = open('nums', 'r')
     listaNums = arquivoNums.readlines()
     for i in range(0,500):
-    	n = listaNums[i].replace("\n","")
-    	e = listaExts[i].replace("\n","")
+        n = listaNums[i].replace("\n","")
+        e = listaExts[i].replace("\n","")
         numNew = extenso(e)
         if (str(numNew) != n):
-        	print n + " != " + str(numNew)
+            print n + " != " + str(numNew)
         #else:
-        #	print "OK: " + n + " == " + str(numNew)
+        #   print "OK: " + n + " == " + str(numNew)
 '''
 

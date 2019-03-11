@@ -212,6 +212,8 @@ def anota_sentencas(sents,modelo,arquitetura="nltk",separacao_contracoes=False):
             lista_de_sentencas.append([nltk.tag.util.str2tuple(wt[0]) for wt in sent])
         etiquetadas=lista_de_sentencas
     maiusculiza_inicio(etiquetadas)
+    print('AnotaCorpus anota_sentencas l216', etiquetadas)
+    print('AnotaCorpus anota_sentencas l218', etiquetadas)
     return etiquetadas
     
     
