@@ -44,8 +44,20 @@ class AplicaRegras(object):
 			return ET.parse(arq_regras).getroot()
 		return ET.parse(expanduser("~")+'/vlibras-translate/data/regras.xml').getroot()
 
+
+	def p(self, action, newprop, newtoken, newtokenpos, specific):
+		print('\n'+'#'*30)
+		print('# action ' +      ('None' if action is None else action.text))
+		print('# newprop ' +     ('None' if newprop is None else newprop.text))
+		print('# newtoken ' +    ('None' if newtoken is None else newtoken.text))
+		print('# newtokenpos ' + ('None' if newtokenpos is None else newtokenpos.text))
+		print('# specific ' +    ('None' if specific is None else specific.text))
+		print('#'*30+'\n')
+
+
 	# Aplica regras morfológicas apartir do arquivo regras.xml
 	def aplicar_regras_morfo(self, lista, sint=False):
+		print('\n\n\n>>> RULES MORPHO')
 		'''Aplica regras morfológicas na lista de tuplas.
 		'''
 		self.lista = list(lista) # Nova cópia da lista morfológica
@@ -59,20 +71,23 @@ class AplicaRegras(object):
 				self.has_rule = False # Boolean caso encontre encontre regra compativel
 				for rule in morpho.findall('rule'):
 					# Verifica se a regra está ativa e se o nome da regra, ou o ínicio, é igual a tag de classificação do token atual
-					if rule.find('active').text == "true" and rule.get('name').split("_")[0] == it.get_ticket():
+
+					a = rule.find("active").text == "true"; #print('rule.find("active").text == "true"', a)
+					b = rule.get('name').split("_")[0] == it.get_ticket(); #print('rule.get(\'name\').split("_")[0] == it.get_ticket()', b)
+					if a and b:
 						count = int(rule.find('count').text)
 						self.lista_iteracoes = [] # Lista que conterá todas tuplas referentes a quantidade de classes da regra
 
 						# Obtém o intervalo de tuplas de acordo com o número de classes da regra
 						try:
 							self.lista_iteracoes = it.get_interval(count)
-							#print '# LISTA DA ITERAÇÂO: '
-							#print self.lista_iteracoes
 						except:
 							continue
 
 						# Gera o nome da regra do intervalo de tuplas e verifica se é igual ao nome da regra em si
+						print('self.lista_iteracoes', self.lista_iteracoes)
 						self.nome_regra = self.gerar_nome_regra(self.lista_iteracoes)
+						print('nome_regra', self.nome_regra)
 						if rule.get('name') == self.nome_regra:
 							self.has_rule = True
 							self.count_iteracao_regra = -1
@@ -80,58 +95,85 @@ class AplicaRegras(object):
 							#print "REGRA MORFOLÓGICA ENCONTRADA: " + rule.get('name')
 
 							self.lista_iteracao_regra = [] # Lista temporária | Insere tokens após a aplicação das regras
-
+							i = 0
+							print('INNER FOR LOOP')
 							for classe in rule.iter('class'): # for nas tags class
 								action = classe.find('action')
 								newprop = classe.find('newprop')
 								newtoken = classe.find('newtoken')
 								newtokenpos = classe.find('newtokenpos')
 								specific = classe.find('specific')
+								print('>>>>>>>>>>>>>>' + str(i));i+=1
+								self.p(action, newprop, newtoken, newtokenpos, specific)
 
 								self.count_iteracao_regra += 1
 								tupla = self.lista_iteracoes[self.count_iteracao_regra]
 
 								if specific is not None:
+									print('specific is not None')
 									result_specific = self.__especificos[specific.text](tupla[0])
+									print('self.__especificos ' + str(self.__especificos.keys()))
+									print('specific.text ' + specific.text)
+									print('tupla[0] ' + tupla[0])
+									print('>>>>>> result_specific ' + str(result_specific))
 									if result_specific is False:
+										print('result_specific is False')
 										#print "REGRA MORFOLÓGICA " + rule.get('name') + " INVÁLIDA. PROCURANDO OUTRA..."
 										self.has_rule = False
 										break
 
 								if action is not None:
+									print('action is not None')
 									action_text = action.text
 									if action_text == "remove":
+										print('action_text == "remove"')
 										self.lista_iteracao_regra.append(None)
+										print('remove self.lista_iteracao_regra', self.lista_iteracao_regra)
 										continue
 									elif action_text == "invert":
+										print('action_text == "invert"')
 										self.lista_iteracao_regra.reverse()
 									elif action_text in self.__acoes:
+										print('action_text in self.__acoes')
 										result_action = self.__acoes[action_text](tupla[0]).lower()
 										self.lista_iteracao_regra.append([result_action, tupla[1]])
 								else:
 									self.lista_iteracao_regra.append(tupla)
 
 								if newprop is not None:
+									print('newprop is not None')
 									self.lista_iteracao_regra[self.count_iteracao_regra][1] = newprop.text
 
 								if newtoken is not None:
+									print('newtoken is not None')
 									if newtokenpos.text == "next":
+										print('newtokenpos.text == "next"')
+										# print('lista_iteracao_regra', self.lista_iteracao_regra, 'tupla', tupla, '\n\n\n')
 										self.lista_iteracao_regra.append([newtoken.text.lower(), "NTK"])
+										# print('lista_iteracao_regra', self.lista_iteracao_regra, 'tupla', tupla, '\n\n\n')
 									elif newtokenpos.text == "previous":
+										print('newtokenpos.text == "previous"')
 										self.lista_iteracao_regra.append(self.lista_iteracao_regra[-1])
 										self.lista_iteracao_regra[-2] = [newtoken.text.lower(), "NTK"]
 									elif newtokenpos.text == "end":
+										print('newtokenpos.text == "end"')
 										print("TODO")
 
 						if self.has_rule:
+							print('self.has_rule')
 							it.skip(count-1)
 							self.lista_corrigida.extend(self.lista_iteracao_regra)
 							break
 
+				print('self.has_rule', self.has_rule)
 				if self.has_rule is False:
+					print('self.has_rule is False')
+					# print('BREAK!!!!!!!!!!!!!!')
 					#print 'NÃO ACHOU REGRA - ' + it.get_word().encode('utf-8')
 					self.lista_corrigida.append(it.get_token()) #se nao achou regra, entao adiciona a tupla original
+		print('>>>END RULES MORPHO\n\n\n')
 		if sint:
+			print('sint')
 			return self.lista_corrigida
 		return [_f for _f in self.lista_corrigida if _f]
 

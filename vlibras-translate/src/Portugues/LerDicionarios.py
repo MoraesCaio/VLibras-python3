@@ -285,6 +285,9 @@ class LerDicionarios(object, metaclass=Singleton):
       '''
       if not self.set_sb_2_gen:
          self.carregar_subs_2_generos()
+      print('token ' + token)
+      print('self.set_sb_2_gen ' + str(self.set_sb_2_gen))
+      print('token in self.set_sb_2_gen ' + str(token in self.set_sb_2_gen))
       return token in self.set_sb_2_gen
 
    def has_verbo_infinitivo(self, token):
