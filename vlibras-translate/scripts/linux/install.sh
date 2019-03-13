@@ -34,7 +34,7 @@ if [[ $response =~ ^(yes|y| ) ]]; then
 		echo -e "# Instalando dependências...\n"
 		sudo apt-get update
 		sudo apt-get install -y python-dev python-setuptools python-pip python-flask python-yaml python-numpy python-matplotlib
-		pip3 install nltk flask-cors nltk_tgrep --upgrade
+		pip3 install nltk flask-cors nltk_tgrep unidecode --upgrade
 
 	fi
 
@@ -49,6 +49,7 @@ fi
 
 read -r -p "Deseja criar as variáveis de ambiente? [Y/n] " response
 response=${response,,} # tolower
+
 if [[ $response =~ ^(yes|y| ) ]]; then
 
     # path to Hunpos Tag
