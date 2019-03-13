@@ -5,7 +5,7 @@ read -r -p "Deseja fazer o download das dependências? [Y/n] " response
 response=${response,,} # tolower
 if [[ $response =~ ^(yes|y| ) ]]; then
  	cd ~
-	git clone https://github.com/MoraesCaio/VLibras-python3.git open-signs
+	git clone --single-branch --branch Python3 https://github.com/MoraesCaio/VLibras-python3.git open-signs
     # mkdir ~/open-signs
 	cd open-signs
 
