@@ -49,22 +49,22 @@ class TraduzSentencas(object):
 		
 		analise_morfologica = self.classificador.obter_classificacao_morfologica()
 
-		print('analise_morfologica', analise_morfologica)
+		# print('analise_morfologica', analise_morfologica)
 
 		if (isinstance(analise_sintatica,type(None))):
 			regras_aplicadas = self.aplic_regras.aplicar_regras_morfo(analise_morfologica)
-			print('1regras_aplicadas', regras_aplicadas)
+			# print('1regras_aplicadas', regras_aplicadas)
 		else:
 			try:
 				regras_aplicadas = self.aplic_regras.aplicar_regras_sint(analise_morfologica, analise_sintatica)
-				print('2regras_aplicadas', regras_aplicadas)
+				# print('2regras_aplicadas', regras_aplicadas)
 			except:
 				regras_aplicadas = self.aplic_regras.aplicar_regras_morfo(analise_morfologica)
-				print('3regras_aplicadas', regras_aplicadas)
+				# print('3regras_aplicadas', regras_aplicadas)
 
 		sentenca_corrigida = self.aplic_regras.simplificar_sentenca(regras_aplicadas)
 
-		print('sentenca_corrigida', sentenca_corrigida)
+		# print('sentenca_corrigida', sentenca_corrigida)
 
 		#glosa = " ".join([x[0] for x in sentenca_corrigida])
 

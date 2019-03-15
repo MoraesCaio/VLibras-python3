@@ -213,9 +213,9 @@ def anota_sentencas(sents,modelo,arquitetura="nltk",separacao_contracoes=False):
         etiquetadas=lista_de_sentencas
     maiusculiza_inicio(etiquetadas)
     
-    print('AnotaCorpus anota_sentencas l216', etiquetadas)
+    # print('AnotaCorpus anota_sentencas l216', etiquetadas)
     etiquetadas = [[(x[0], x[1].decode('utf-8')) for x in etiquetadas[0]]]
-    print('AnotaCorpus anota_sentencas l218', etiquetadas)
+    # print('AnotaCorpus anota_sentencas l218', etiquetadas)
     return etiquetadas
     
     

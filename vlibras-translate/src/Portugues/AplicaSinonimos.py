@@ -31,7 +31,7 @@ class AplicaSinonimos(object):
 		'''Percorre a lista fazendo a substituição pelos sinonimos.
 		'''
 		lista_corrigida = []
-		print('AplicaSinonimos aplicar_sinonimos l34:\n', lista_anotada)
+		# print('AplicaSinonimos aplicar_sinonimos l34:\n', lista_anotada)
 		for tupla in lista_anotada:
 			sinonimo = tupla[0].upper()
 			#sinonimo = self.verificar_sinonimo(tupla[0].upper())
@@ -43,10 +43,10 @@ class AplicaSinonimos(object):
 				else:
 					cardinal = self.converter_ordinal_para_cardinal(sinonimo)
 					lista_corrigida.append(cardinal)
-					print('AplicaSinonimos aplicar_sinonimos l46:\n', cardinal)
+					# print('AplicaSinonimos aplicar_sinonimos l46:\n', cardinal)
 					continue
 			lista_corrigida.append(sinonimo)
-		print(lista_corrigida)
+		# print(lista_corrigida)
 		return self.verificar_palavra_composta(lista_corrigida)
 
 	# Verifica se há sinonimo do token  

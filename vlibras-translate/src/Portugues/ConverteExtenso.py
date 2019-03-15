@@ -133,10 +133,10 @@ def convert_extenso(extenso):
     nums = []
     it = Iterator()
     it.load(extensoQuebrado)
-    print('extenso', extenso)
+    # print('extenso', extenso)
     while(it.has_next()):
         token = simplifica(it.get_token())
-        print('token', token)
+        # print('token', token)
         tokenAnterior = simplifica(it.get_token(-1))
         if (token in und):
             if(it.get_count() == 0):
@@ -155,7 +155,7 @@ def convert_extenso(extenso):
                 nums[-1] = newToken
             else:
                 nums.append(auxToken)
-    print('nums', nums)
+    # print('nums', nums)
     return soma(nums)
 
 def soma(lista):
@@ -167,7 +167,7 @@ def soma(lista):
 def simplifica(txt):
     newToken = ""
 
-    print('txt', txt)
+    # print('txt', txt)
     try:
         newToken = normalize('NFKD', txt).encode('ASCII', 'ignore').decode('utf-8')
     except:
@@ -176,7 +176,7 @@ def simplifica(txt):
     if(newToken[-3:] == "oes"):
         return newToken[:-3] + "ao"
 
-    print('newToken', newToken)
+    # print('newToken', newToken)
     return newToken
 
 # Test
