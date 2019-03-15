@@ -156,7 +156,7 @@ class AplicaRegras(object):
                                         self.lista_iteracao_regra[-2] = [newtoken.text.lower(), "NTK"]
                                     elif newtokenpos.text == "end":
                                         # print('newtokenpos.text == "end"')
-                                        # print("TODO")
+                                        print("TODO")
 
                         if self.has_rule:
                             # print('self.has_rule')
