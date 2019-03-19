@@ -181,6 +181,7 @@ class AplicaRegras(object):
 	def aplicar_regras_sint(self, lista, arvore):
 		'''Aplica regras sintáticas na árvore.
 		'''
+		# print("Arvore", arvore)
 		p_arvore = ParentedTree.convert(arvore)
 		self.adaptar_regras_morfo_arvore(lista, p_arvore)
 		for morpho in self.__root.findall('syntactic'):
@@ -284,10 +285,23 @@ class AplicaRegras(object):
 		'''
 		lista_pos_arv = []
 		# Pega as posições das classificações morfológicas dos tokens na arvore sintática
-		for tupla in lista:
+		# print(arvore, type(arvore))
+		lista_sem_SPT = [token for token in lista if token[1] != 'SPT']
+		for tupla in lista_sem_SPT:
+			print(tupla[0], type(tupla[0]))
+			print(tupla[1], type(tupla[1]))
+			# print(self.corrigir_nome_regra(tupla[1]), type(self.corrigir_nome_regra(tupla[1])))
+			# print(self.remover_acento(tupla[0].lower()), type(self.remover_acento(tupla[0].lower())))
+
 			string_grep = self.corrigir_nome_regra(tupla[1]) + " < " + tupla[0].lower()
-			node = tgrep_positions(arvore, string_grep)
-			if not node:
+			# print(arvore, type(arvore))
+			# print(string_grep, type(string_grep))
+			try:
+				node = tgrep_positions(arvore, string_grep)
+				if not node:
+					string_grep = self.corrigir_nome_regra(tupla[1]) + " < " + self.remover_acento(tupla[0].lower())
+					node = tgrep_positions(arvore, string_grep)
+			except Exception:
 				string_grep = self.corrigir_nome_regra(tupla[1]) + " < " + self.remover_acento(tupla[0].lower())
 				node = tgrep_positions(arvore, string_grep)
 			if node[0] in lista_pos_arv:
@@ -295,7 +309,7 @@ class AplicaRegras(object):
 			lista_pos_arv.append(node[0])
 
 		# Aplica regras morfológicas na lista
-		morfo = self.aplicar_regras_morfo(lista, sint=True)
+		morfo = self.aplicar_regras_morfo(lista_sem_SPT, sint=True)
 
 		# Corrige arvore de acordo com a lista após aplicar as regras morfológicas
 		for i in range(0, len(morfo)):
@@ -334,7 +348,7 @@ class AplicaRegras(object):
 			elif arv_ticket != morfo[i][1]:
 				arvore[lista_pos_arv[i]].set_label(morfo[i][1])
 
-			#draw.draw_trees(arvore)
+		# draw.draw_trees(arvore)
 
 	def converter_arv_para_lista(self, arvore):
 		'''Converte árvore sintática para uma lista de tuplas (igual a lista morfológica).
@@ -352,7 +366,7 @@ class AplicaRegras(object):
 		'''Remove acento de um texto.
 		'''
 		try:
-			return unidecode.unidecode(texto)
+			return unidecode(texto)
 		except:
 			return normalize('NFKD', texto.encode('iso-8859-1').decode('iso-8859-1')).encode('ASCII','ignore')
 
@@ -373,7 +387,7 @@ class AplicaRegras(object):
 		for i in range(0, len(split)):
 			split[i] = re.sub(r"[-+]","_", split[i])
 			split[i] = re.sub(r"\$","_S",split[i])
-		return "-".join(split).encode('utf-8')
+		return "-".join(split)
 
 	def separar_regra(self, regra):
 		'''Separa a regra por nó pai e seus filhos.

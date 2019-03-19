@@ -121,7 +121,7 @@ class TemplateClassificaSentencas():
 		"""
 		arquivo = self.encontra_arquivo()
 		if arquivo:
-			f=open(arquivo,"rU")
+			f=open(arquivo,"r")
 			sintaxe=f.read()
 			f.close()
 			return sintaxe
