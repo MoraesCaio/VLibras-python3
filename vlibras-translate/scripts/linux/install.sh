@@ -69,8 +69,9 @@ if [[ $response =~ ^(yes|y| ) ]]; then
 	echo -e "export NLTK_DATA" >> ~/.bashrc
 
 	# path to Aelius and Translate package (new version)
-	echo -e "\nPYTHONPATH=\"${PYTHONPATH}:$HOME/open-signs/vlibras-libs/aelius:$HOME/open-signs/vlibras-translate/src:$HOME/open-signs/vlibras-translate/src/Ingles:$HOME/open-signs/vlibras-translate/src/Portugues:$HOME/open-signs/vlibras-translate/src/Espanhol:$HOME/open-signs/vlibras-translate/src/Templates:$HOME/open-signs/vlibras-translate/src/Templates\"" >> ~/.bashrc
+	echo -e "\nPYTHONPATH=\"$HOME/open-signs/vlibras-libs/aelius:$HOME/open-signs/vlibras-translate/src:$HOME/open-signs/vlibras-translate/src/Ingles:$HOME/open-signs/vlibras-translate/src/Portugues:$HOME/open-signs/vlibras-translate/src/Espanhol:$HOME/open-signs/vlibras-translate/src/Templates:$HOME/open-signs/vlibras-translate/src/Templates:${PYTHONPATH}\"" >> ~/.bashrc
 	echo -e "export PYTHONPATH\n" >> ~/.bashrc
+
 
 	echo -e "\n## Execute o seguinte comando para concluir:\n\n$ source ~/.bashrc\n"
 fi
