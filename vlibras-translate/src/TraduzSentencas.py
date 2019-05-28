@@ -34,8 +34,9 @@ class TraduzSentencas(object):
         # fact.define_class()
 
         self.dic_lang = {"pt_br": ["ClassificaSentencas", "AplicaRegras", "AplicaSinonimos"],
-                         "en": ["ClassificaSentencas_Ingles", "AplicaRegras_Ingles", "AplicaSinonimos_Ingles"],
-                         "es": ["ClassificaSentencas_Espanhol", "AplicaRegras_Espanhol", "AplicaSinonimos_Espanhol"]}
+                         # "en": ["ClassificaSentencas_Ingles", "AplicaRegras_Ingles", "AplicaSinonimos_Ingles"],
+                         # "es": ["ClassificaSentencas_Espanhol", "AplicaRegras_Espanhol", "AplicaSinonimos_Espanhol"]
+                         }
 
         self.classificador = __import__(self.dic_lang[lang][0]).ClassificaSentencas()
         self.aplic_regras = __import__(self.dic_lang[lang][1]).AplicaRegras()
@@ -50,7 +51,6 @@ class TraduzSentencas(object):
         except Exception as ex:
             analise_sintatica = None
             has_sintatica = False
-
         analise_morfologica = self.classificador.obter_classificacao_morfologica()
 
         # print('analise_morfologica', analise_morfologica)

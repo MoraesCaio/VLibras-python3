@@ -25,7 +25,7 @@ def constroiDicionarioDeArquivo(arquivo=ARQUIVO):
 em um dicionário em que o valor de dic[etiqueta1] é etiqueta2.
 	"""
 	dic={}
-	f=open(arquivo,"rU")
+	f=open(arquivo,"r")
 	for linha in f:
 		chave,valor=linha.strip().split()
 		dic[chave]=valor

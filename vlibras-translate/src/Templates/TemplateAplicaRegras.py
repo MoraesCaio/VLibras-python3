@@ -10,6 +10,7 @@ from Iterator import *
 from ConverteExtenso import *
 from nltk_tgrep import tgrep_positions, tgrep_nodes
 from nltk import ParentedTree, Tree, draw
+from unidecode import unidecode
 
 
 class TemplateAplicaRegras():
@@ -130,7 +131,7 @@ class TemplateAplicaRegras():
         if len(end_list) > 0:
             aux = None
 
-            if self.lista_corrigida[-1][0].encode('utf-8') in self.__pontuacoes:
+            if self.lista_corrigida[-1][0] in self.__pontuacoes:
                 aux = self.lista_corrigida[-1]
                 self.lista_corrigida.pop(-1)
                 # print(aux)
@@ -318,7 +319,7 @@ class TemplateAplicaRegras():
         '''Remove acento de um texto.
         '''
         try:
-            return normalize('NFKD', texto.encode('utf-8').decode('utf-8')).encode('ASCII', 'ignore')
+            return unidecode(texto)
         except:
             return normalize('NFKD', texto.encode('iso-8859-1').decode('iso-8859-1')).encode('ASCII', 'ignore')
 
@@ -339,7 +340,7 @@ class TemplateAplicaRegras():
         for i in range(0, len(split)):
             split[i] = re.sub(r"[-+]", "_", split[i])
             split[i] = re.sub(r"\$", "_S", split[i])
-        return "-".join(split).encode('utf-8')
+        return "-".join(split)
 
     def separar_regra(self, regra):
         '''Separa a regra por nó pai e seus filhos.
