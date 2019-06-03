@@ -40,19 +40,12 @@ class AplicaRegras(object):
     def get_root(self):
         '''Verifica qual o SO e gera o path de onde se encontra o diretório data.
         '''
-        if "TRANSLATE_DATA" in environ:
-            arq_regras = path.join(environ.get("TRANSLATE_DATA"), "regras.xml")
-            return ET.parse(arq_regras).getroot()
-        return ET.parse(expanduser("~") + '/vlibras-translate/data/regras.xml').getroot()
-
-    # def p(self, action, newprop, newtoken, newtokenpos, specific):
-    # 	print('\n'+'#'*30)
-    # 	print('# action ' +      ('None' if action is None else action.text))
-    # 	print('# newprop ' +     ('None' if newprop is None else newprop.text))
-    # 	print('# newtoken ' +    ('None' if newtoken is None else newtoken.text))
-    # 	print('# newtokenpos ' + ('None' if newtokenpos is None else newtokenpos.text))
-    # 	print('# specific ' +    ('None' if specific is None else specific.text))
-    # 	print('#'*30+'\n')
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        arq_regras = path.join(current_dir, '../../data', "regras.xml")
+        return ET.parse(arq_regras).getroot()
+        # if "TRANSLATE_DATA" in environ:
+        #     arq_regras = path.join(environ.get("TRANSLATE_DATA"), "regras.xml")
+        # return ET.parse(expanduser("~") + '/vlibras-translate/data/regras.xml').getroot()
 
     # Aplica regras morfológicas apartir do arquivo regras.xml
     def aplicar_regras_morfo(self, lista, sint=False):

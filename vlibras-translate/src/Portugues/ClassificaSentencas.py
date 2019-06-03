@@ -45,6 +45,8 @@ class ClassificaSentencas(TemplateClassificaSentencas):
     def __init__(self):
         self.sentenca_anotada = ""
         self.sleep_times = [0.1, 0.2]
+        current_dir = path.dirname(path.abspath(__file__))
+        self.cfg_nltk = path.join(current_dir, '../../data', "cfg.syn.nltk")
 
     def toqueniza(self, s):
         """Decodifica string utilizando utf-8, retornando uma lista de tokens em unicode.
@@ -128,9 +130,10 @@ class ClassificaSentencas(TemplateClassificaSentencas):
     def encontra_arquivo(self):
         """Encontra arquivo na pasta vlibras-translate.
         """
-        if "TRANSLATE_DATA" in environ:
-            return path.join(environ.get("TRANSLATE_DATA"), "cfg.syn.nltk")
-        return expanduser("~") + "/vlibras-translate/data/cfg.syn.nltk"
+        return self.cfg_nltk
+        # if "TRANSLATE_DATA" in environ:
+        #     return path.join(environ.get("TRANSLATE_DATA"), "cfg.syn.nltk")
+        # return expanduser("~") + "/vlibras-translate/data/cfg.syn.nltk"
 
     def extrai_sintaxe(self):
         """Extrai gramática armazenada em arquivo cujo caminho é definido relativamente ao diretório nltk_data.

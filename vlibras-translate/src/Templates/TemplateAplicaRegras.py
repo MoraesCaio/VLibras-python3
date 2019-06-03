@@ -28,6 +28,10 @@ class TemplateAplicaRegras():
     def get_root(self):
         '''Verifica qual o SO e gera o path de onde se encontra o diretório data.
         '''
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        arq_regras = path.join(environ.get("TRANSLATE_DATA"), self.fileXML)
+        return ET.parse(arq_regras).getroot()
+
         if "TRANSLATE_DATA" in environ:
             arq_regras = path.join(environ.get("TRANSLATE_DATA"), self.fileXML)
             return ET.parse(arq_regras).getroot()
@@ -364,43 +368,43 @@ class TemplateAplicaRegras():
         return "_".join(nome_regra)
 
     '''Simplifica a sentença para que possa evitar a ditalogia.
-		Como por exemplo a troca de uma palavra no plural para singular.
-	'''
+        Como por exemplo a troca de uma palavra no plural para singular.
+    '''
 
     """def simplificar_sentenca(self, lista):
-					'''Simplifica a sentença para que possa evitar a ditalogia.
-					Como por exemplo a troca de uma palavra no plural para singular.
-					'''
-					lista_simplificada = list(lista)
-					it = Iterator()
-					it.load(lista_simplificada)
-					num = False
-					while(it.has_next()):
-						tag = it.get_ticket()
+                    '''Simplifica a sentença para que possa evitar a ditalogia.
+                    Como por exemplo a troca de uma palavra no plural para singular.
+                    '''
+                    lista_simplificada = list(lista)
+                    it = Iterator()
+                    it.load(lista_simplificada)
+                    num = False
+                    while(it.has_next()):
+                        tag = it.get_ticket()
 
-						try:
-							num_romano = roman_to_int(it.get_word().encode('utf-8'))
-							if it.get_prev_ticket()[-2:] == "-F":
-								lista_simplificada[it.get_count()] = [num_romano+"ª".decode('utf-8'), 'NUM-R']
-							else:
-								lista_simplificada[it.get_count()] = [num_romano+"º".decode('utf-8'), 'NUM-R']
-						except:
-							pass
+                        try:
+                            num_romano = roman_to_int(it.get_word().encode('utf-8'))
+                            if it.get_prev_ticket()[-2:] == "-F":
+                                lista_simplificada[it.get_count()] = [num_romano+"ª".decode('utf-8'), 'NUM-R']
+                            else:
+                                lista_simplificada[it.get_count()] = [num_romano+"º".decode('utf-8'), 'NUM-R']
+                        except:
+                            pass
 
-						if tag == "NUM":
-							num = True
+                        if tag == "NUM":
+                            num = True
 
-						if tag != "NPR-P" and (tag[-2:] == "-P" or tag[-2:] == "_P") and self.verificar_excecao_plural(it.get_word()):
-							singular = self.analisar_plural(it.get_word())
-							lista_simplificada[it.get_count()][0] = singular
+                        if tag != "NPR-P" and (tag[-2:] == "-P" or tag[-2:] == "_P") and self.verificar_excecao_plural(it.get_word()):
+                            singular = self.analisar_plural(it.get_word())
+                            lista_simplificada[it.get_count()][0] = singular
 
-					if num:
-						try:
-							lista_simplificada = self.converter_extenso(lista_simplificada)
-						except:
-							pass
+                    if num:
+                        try:
+                            lista_simplificada = self.converter_extenso(lista_simplificada)
+                        except:
+                            pass
 
-					return lista_simplificada"""
+                    return lista_simplificada"""
 
     def simplificar_sentenca(self, lista):
         return lista

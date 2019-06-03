@@ -41,9 +41,11 @@ class LerDicionarios(object, metaclass=Singleton):
    def get_path(self):
       '''Verifica qual o SO e gera o path de onde se encontra o diretório data.
       '''
-      if "TRANSLATE_DATA" in os.environ:
-         return os.environ.get("TRANSLATE_DATA")
-      return os.path.expanduser("~") + "/vlibras-translate/data"      
+      current_dir = os.path.dirname(os.path.abspath(__file__))
+      return os.path.join(current_dir, '../../data')
+      # if "TRANSLATE_DATA" in os.environ:
+      #    return os.environ.get("TRANSLATE_DATA")
+      # return os.path.expanduser("~") + "/vlibras-translate/data"      
 
    def montar_diretorio(self, arquivo):
       return os.path.join(self.path, arquivo)

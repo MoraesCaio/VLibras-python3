@@ -118,9 +118,11 @@ class TemplateClassificaSentencas():
     def encontra_arquivo(self):
         """Encontra arquivo na pasta vlibras-translate.
         """
-        if "TRANSLATE_DATA" in environ:
-            return path.join(environ.get("TRANSLATE_DATA"), "cfg.syn.nltk")
-        return expanduser("~") + "/vlibras-translate/data/cfg.syn.nltk"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        return path.join(current_dir, '../../data', "cfg.syn.nltk")
+        # if "TRANSLATE_DATA" in environ:
+        #     return path.join(environ.get("TRANSLATE_DATA"), "cfg.syn.nltk")
+        # return expanduser("~") + "/vlibras-translate/data/cfg.syn.nltk"
 
     def extrai_sintaxe(self):
         """Extrai gramática armazenada em arquivo cujo caminho é definido relativamente ao diretório nltk_data.
